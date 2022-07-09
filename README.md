@@ -1,4 +1,4 @@
-<p align="center"><a href="https://bibhutisolutions.com/" target="_blank"><img src="https://storage.googleapis.com/client-email-signatures/logo.png" width="400"></a></p>
+<p align="center"><a href="https://bibhutisolutions.com/" target="_blank"><img src="https://storage.googleapis.com/client-email-signatures/logo.png" width="200"></a></p>
 
 
 ## About Consultancy 
