@@ -125,6 +125,9 @@ Route::group(['middleware' => 'auth','namespace' => 'App\Http\Controllers'], fun
         Route::get('{admission}/edit', 'Admission\AdmissionController@edit')->name('edit');
         Route::put('{admission}', 'Admission\AdmissionController@update')->name('update');
         Route::get('admission/{id}/destroy', 'Admission\AdmissionController@destroy')->name('destroy');
+        Route::get('admission/commission-rate/{id}/', 'Admission\AdmissionController@commissionRate')->name('commission');
+        Route::post('admission/commission/store','Admission\AdmissionController@storeCommissionRate')->name('store_commission');
+        Route::get('/{id}/delete-commission','Admission\AdmissionController@deleteCommission')->name('delete_commission');
 
     });
 

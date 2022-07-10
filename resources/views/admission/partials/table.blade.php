@@ -15,6 +15,10 @@
             class="btn btn-icon-toggle">
                 <i class="far fa-trash-alt"></i>
             </button>
+        </a>
+        <a href="{{route('admission.commission', $admission->admissions_id)}}"  class="btn btn-primary btn-sm" title="Add Commission">
+            Add Commission
+        </a>
     </td>
 </tr>
 

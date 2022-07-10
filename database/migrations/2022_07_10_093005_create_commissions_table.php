@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAdmissionsTable extends Migration
+class CreateCommissionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,14 @@ class CreateAdmissionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('tbl_admissions', function (Blueprint $table) {
-            $table->id('admissions_id');
-            $table->string('college');
+        Schema::create('tbl_commissions', function (Blueprint $table) {
+            $table->id('commissions_id');
+            $table->string('title');
+            $table->bigInteger('admission_id')->unsigned()->index()->nullable();
+            $table->foreign('admission_id')->references('admissions_id')->on('tbl_admissions')->onUpdate('cascade')->onDelete('cascade');
             $table->bigInteger('student_id')->unsigned()->index()->nullable();
             $table->foreign('student_id')->references('students_id')->on('tbl_students')->onUpdate('cascade')->onDelete('cascade');
-            $table->date('admission_date');
+            $table->date('claim_date');
             $table->string('fees');
             $table->string('display_order')->nullable();
             $table->string('remarks')->nullable();
@@ -38,6 +40,6 @@ class CreateAdmissionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tbl_admissions');
+        Schema::dropIfExists('tbl_commissions');
     }
 }
