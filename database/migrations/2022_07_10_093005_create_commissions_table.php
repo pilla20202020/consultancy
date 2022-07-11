@@ -22,6 +22,7 @@ class CreateCommissionsTable extends Migration
             $table->foreign('student_id')->references('students_id')->on('tbl_students')->onUpdate('cascade')->onDelete('cascade');
             $table->date('claim_date');
             $table->string('fees');
+            $table->enum('commissions_status',['pending','paid'])->nullable();
             $table->string('display_order')->nullable();
             $table->string('remarks')->nullable();
             $table->enum('status',['active','in_active'])->nullable();

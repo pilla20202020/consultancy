@@ -31,7 +31,7 @@
                     <div class="col-md-12">
                         <div class="card">
                             <div class="card-body">
-                                <h4 class="card-title mb-1">Hotel Summary</h4>
+                                <h4 class="card-title mb-1">All Summary</h4>
                                 <div class="row p-3">
                                     <div class="col-md-3 p-2" style="border-left: 4px solid #44a2d2;">
                                         <span class="pl-2">{{$users_count}}</span>
@@ -46,6 +46,7 @@
 
 
                 </div>
+                
 
 
 
@@ -58,9 +59,10 @@
     <script src="{{ asset('js/lightbox.js') }}"></script>
     <script>
         $(document).ready( function () {
-            $('#datatable').DataTable({
-                order: [ [0, 'desc'] ]
+            $('#example').DataTable({
+                order: [[4, 'asc'] ]
             });
-        } );
+        });
+
     </script>
 @endsection

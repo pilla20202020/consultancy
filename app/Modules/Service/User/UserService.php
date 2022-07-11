@@ -66,8 +66,8 @@ class UserService extends Service
                 }
             })
             ->editcolumn('actions',function(user $user) {
-                $editRoute =  route('user.edit',$user->id);
-                $deleteRoute =  route('user.destroy',$user->id);
+                $editRoute =  route('user.edit',$user->users_id);
+                $deleteRoute =  route('user.destroy',$user->users_id);
                 return getTableHtml($user,'actions',$editRoute,$deleteRoute);
                 return getTableHtml($user,'image');
             })->rawColumns(['visibility','availability','status','image'])->make(true);
@@ -103,7 +103,7 @@ class UserService extends Service
     {
         $filter['limit'] = 25;
 
-        return $this->user->orderBy('id','DESC')->whereIsDeleted('no')->paginate($filter['limit']);
+        return $this->user->orderBy('users_id','DESC')->whereIsDeleted('no')->paginate($filter['limit']);
     }
 
     /**

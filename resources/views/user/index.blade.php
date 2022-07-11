@@ -72,7 +72,7 @@
                     }
                 ],
                 "columns": [
-                    { "data": "id",  'visible': false },
+                    { "data": "users_id",  'visible': false },
                     { "data": "DT_RowIndex",  orderable: false, searchable: false },
                     { "data": "name" },
                     { "data": "status" },

@@ -155,11 +155,12 @@ class AdmissionController extends Controller
             $commissions = $this->commission->where('admission_id', $request->admission_id);
             $commissions->delete();
             $p = 0;
-            dd($request->all());
+
             foreach($request->title as $content) {
                 $commissions = new Commission();
                 $commissions['admission_id'] = $request->admission_id;
                 $commissions['student_id'] = $request->student_id;
+                $commissions['commissions_status'] = (isset($request->commissions_status[$p]) ?  $request->commissions_status[$p] : 'pending');
                 $commissions['title'] = $content;
                 $commissions['fees'] = $request->fees[$p];
                 $commissions['claim_date'] = $request->claim_date[$p];
@@ -190,5 +191,34 @@ class AdmissionController extends Controller
             return false;
         }
 
+    }
+
+    // Get Commission Detail
+    public function getCommissionDetail(Request $request) {
+        if($data = $this->commission->where('admission_id', $request->admission_id)->get())
+        {
+            return response()->json([
+                'data' => $data,
+                'status' => true,
+                'message' => "Commission Generated Successfully."
+            ]);
+        }
+    }
+
+    public function changeStatus(Request $request) {
+        try{
+            $commission = $this->commission->where('commissions_id',$request->commissions_id);
+            $data['commissions_status'] = $request->commissions_status;
+            if($commission->update($data)) {
+                Toastr()->success('Commission Status Updated Successfully','Success');
+                return redirect()->back();
+            } else {
+                Toastr()->error('There was error while updating status.','Sorry');
+                return redirect()->back();
+            }
+
+        } catch (Exception $e) {
+            return false;
+        }
     }
 }

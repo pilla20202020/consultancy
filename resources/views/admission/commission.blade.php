@@ -66,34 +66,28 @@
                                         </div>
 
                                         <div class="col-sm-2">
-                                            <label class="control-label">Date</label>
+                                            <label class="control-label">Claim Date</label>
                                             <input type="date" name="claim_date[]" class="form-control" value="{{$commission->claim_date}}" readonly>
                                         </div>
 
-                                        {{-- <div class="col-sm-2">
-                                            <label class="control-label">Status</label>
-                                            <div class="">
-                                                <select data-placeholder="Select Status"
-                                                    class="select2 tail-select form-control " id=""
-                                                    name="status" required>
-                                                    <option value="" selected disabled >Select Status</option>
-                                                    <option value="pending" {{ old('status') == 'pending' ? 'selected' : '' }} @if(isset($commission) && $commission->status == "pending" ) selected @endif>Pending</option>
-                                                    <option value="paid" {{ old('status') == 'paid' ? 'selected' : '' }} @if(isset($commission) && $commission->status == "paid" ) selected @endif>Paid</option>
+                                        <div class="col-sm-2">
+                                            <label class="control-label">Commissions Status</label>
+                                            <input type="text" name="commissions_status[]" class="form-control" value="{{$commission->commissions_status}}" readonly>
+                                        </div>
 
-                                                </select>
-                                                @error('status')
-                                                    <span class="text-danger">{{ $errors->first('status') }}</span>
-                                                @enderror
-                                            </div>
+                                        <div class="col-md-1" style="margin-top: 45px;">
+                                            <a href="javascript: void(0);" data-commission_id="{{$commission->commissions_id}}" data-commission_status="{{$commission->commissions_status}}"  class="btn btn-warning btn-sm mr-1 p-2 changestatus" title="Change Status">
+                                                Change Status
+                                            </a>
                                         </div>
 
                                         <div class="col-md-2" style="margin-top: 45px;">
-                                            <a href="#" class="btn btn-sm btn-danger mr-1" type="submit" value="">Change Status</a>
-                                        </div> --}}
-
-                                        <div class="col-md-3" style="margin-top: 45px;">
                                             <a href="{{route('admission.delete_commission',$commission->commissions_id)}}" class="btn btn-sm btn-danger mr-1 p-2" type="submit" value=""><i class="far fa-trash-alt"></i> Remove Commission</a>
                                         </div>
+
+
+
+
                                     </div>
                                 @endforeach
                             @endif
@@ -141,10 +135,66 @@
             </div>
         </div>
     </div>
+
+    {{-- Change Status Modal --}}
+    <div class="modal fade bs-example-modal-center" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title align-self-center mt-0 text-center" id="exampleModalLabel">Change Status</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{route('admission.changestatus')}}" method="POST" class="form form-validate floating-label">
+                        @csrf
+                        <input type="hidden" class="change_status_commission" value="" name="commissions_id" id="">
+                        <div class="row justify-content-center">
+                            <div class="col-md-12">
+                                <label class="control-label">Status</label>
+                                <div class="">
+                                    <select data-placeholder="Select Status"
+                                        class="select2 tail-select form-control " id="mydropdownlist"
+                                        name="commissions_status" required>
+                                        <option value="" selected disabled >Select Status</option>
+                                        <option value="pending">Pending</option>
+                                        <option value="paid" >Paid</option>
+
+                                    </select>
+                                    @error('commissions_status')
+                                        <span class="text-danger">{{ $errors->first('commissions_status') }}</span>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr>
+                        <div class="row mt-2 justify-content-center">
+                            <div class="form-group">
+                                <div>
+                                    <input type="submit" name="pageSubmit" class="btn btn-danger waves-effect waves-light" value="Submit">
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div>
 @endsection
 
 @section('scripts')
     <script>
+
+        $(document).on('click','.changestatus',function (e) {
+            let commission_id = $(this).data('commission_id');
+            let commission_status = $(this).data('commission_status');
+            $(".change_status_commission").val(commission_id);
+            $("#mydropdownlist").val(commission_status);
+            $('.bs-example-modal-center').modal('show');
+
+        });
         $(document).on('click', '#additemrowedu', function() {
             var b = parseFloat($("#tempedu").val());
             b = b + 1;
@@ -163,7 +213,7 @@
 
                 <div class="col-sm-3">
                     <label class="control-label">Claim Date</label>
-                    <input type="date" name="claim_date[]" class="form-control" required>
+                    <input type="date" name="claim_date[]" min="{{date('Y-m-d')}}" class="form-control" required>
                 </div>
 
 
@@ -189,5 +239,8 @@
             var p = o.parentNode.parentNode;
             p.parentNode.removeChild(p);
         }
+
+
+
     </script>
 @endsection

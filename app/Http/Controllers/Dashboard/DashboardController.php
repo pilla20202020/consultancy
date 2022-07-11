@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
+use App\Modules\Models\Admission\Admission;
 use App\Modules\Models\Candidate\Candidate;
 use App\Modules\Service\Candidate\CandidateService;
 use App\Modules\Service\Permission\PermissionService;
@@ -12,8 +13,11 @@ use App\Modules\Models\User;
 use App\Modules\Models\Batch\Batch;
 use App\Modules\Models\Candidate\SelectedCandidate;
 use App\Modules\Models\CheckIn\CheckIn;
+use App\Modules\Models\Commission\Commission;
 use App\Modules\Models\Customer\Customer;
+use App\Modules\Models\Student\Student;
 use App\Modules\Service\Customer\CustomerService;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
@@ -23,15 +27,20 @@ class DashboardController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    protected $user, $role, $permission;
+    protected $user, $role, $permission, $student, $admission, $commission;
 
-    function __construct(UserService $user)
+    function __construct(UserService $user, Student $student, Admission $admission, Commission $commission)
     {
         $this->user = $user;
+        $this->student = $student;
+        $this->admission = $admission;
+        $this->commission = $commission;
     }
     public function index()
     {
+
         $users_count = User::count();
+
         return view('dashboard.index',compact('users_count'));
 
     }

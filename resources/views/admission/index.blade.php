@@ -43,6 +43,36 @@
             </div>
         </div>
     </div>
+
+    {{-- View Payment Modal --}}
+    <div class="modal fade bs-example-modal-center" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title align-self-center mt-0 text-center" id="exampleModalLabel">View Payment History</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-bordered">
+                        <thead class="thead-light">
+                            <tr>
+                                <th>S.No.</th>
+                                <th>Title</th>
+                                <th>Fees</th>
+                                <th>Claim Date</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="studentadmission">
+
+                        </tbody>
+                    </table>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div>
 @endsection
 @section('page-specific-scripts')
     <script src="{{ asset('js/datatables.min.js') }}"></script>
@@ -50,6 +80,42 @@
     <script>
         $(document).ready( function () {
             $('#example').DataTable();
+        });
+
+        $(document).on('click','.viewhistory',function (e) {
+            let admission_id = $(this).data('admission_id');
+            $.ajax({
+                type: 'get',
+                url: '{{route('admission.getcommissiondetail')}}',
+                data: {
+                    admission_id: admission_id,
+                },
+                success:function(response){
+                if(typeof(response) != 'object'){
+                    response = JSON.parse(response)
+                }
+                var tbody_html = "";
+                if(response.status){
+                    $.each(response.data, function(key, commission_detail){
+                        key = key+1;
+                        tbody_html += "<tr>";
+                        tbody_html += "<td>"+key+"</td>";
+                        tbody_html += "<td>"+commission_detail.title+"</td>";
+                        tbody_html += "<td>"+commission_detail.fees+"</td>";
+                        tbody_html += "<td>"+commission_detail.claim_date+"</td>";
+                        if(commission_detail.commissions_status == "pending") {
+                            tbody_html += "<td><span class='badge badge-danger p-2'>Pending</span></td>";
+                        } else {
+                            tbody_html += "<td><span class='badge badge-success p-2'>Paid</span></td>";
+                        }
+                        tbody_html += "</tr>";
+                    });
+                    $('#studentadmission').html(tbody_html);
+                    $('.bs-example-modal-center').modal('show');
+                }
+            }
+
+            })
         });
 
 

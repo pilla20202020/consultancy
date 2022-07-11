@@ -128,6 +128,8 @@ Route::group(['middleware' => 'auth','namespace' => 'App\Http\Controllers'], fun
         Route::get('admission/commission-rate/{id}/', 'Admission\AdmissionController@commissionRate')->name('commission');
         Route::post('admission/commission/store','Admission\AdmissionController@storeCommissionRate')->name('store_commission');
         Route::get('/{id}/delete-commission','Admission\AdmissionController@deleteCommission')->name('delete_commission');
+        Route::get('getcommissiondetail', 'Admission\AdmissionController@getCommissionDetail')->name('getcommissiondetail');
+        Route::post('changeStatus', 'Admission\AdmissionController@changeStatus')->name('changestatus');
 
     });
 

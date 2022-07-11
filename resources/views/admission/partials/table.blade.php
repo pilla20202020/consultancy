@@ -19,6 +19,10 @@
         <a href="{{route('admission.commission', $admission->admissions_id)}}"  class="btn btn-primary btn-sm" title="Add Commission">
             Add Commission
         </a>
+
+        <button data-admission_id="{{$admission->admissions_id}}"  class="btn btn-warning btn-sm viewhistory" title="Add Commission">
+            View Payment
+        </button>
     </td>
 </tr>
 
