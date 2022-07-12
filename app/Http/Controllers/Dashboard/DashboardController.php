@@ -38,10 +38,11 @@ class DashboardController extends Controller
     }
     public function index()
     {
-
+        $date = Carbon::now()->addDays(30);
         $users_count = User::count();
-
-        return view('dashboard.index',compact('users_count'));
+        $commissions = $this->commission->where('claim_date', '>', date('Y-m-d'))->whereBetween('claim_date', [date('Y-m-d'),$date])->orderBy('claim_date', 'ASC')->where('commissions_status','pending')->get();
+        $commissions = $commissions->unique('student_id');
+        return view('dashboard.index',compact('users_count','commissions'));
 
     }
 

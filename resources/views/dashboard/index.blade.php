@@ -46,7 +46,46 @@
 
 
                 </div>
-                
+                <div class="row">
+                    <div class="col-xl-12 p-0">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title mb-4">Upcoming Commission Pending Lists</h5>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="table-responsive">
+                                            <table id="example" class="table table-hover display">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Student Name</th>
+                                                        <th>College</th>
+                                                        <th>Admission Date</th>
+                                                        <th>Upcoming Commission </th>
+                                                        <th>Commission Claim Date</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach ($commissions as $commission)
+                                                        <tr>
+                                                            <td>{{$commission->student->name}}</td>
+                                                            <td>{{$commission->admission->college}}</td>
+                                                            <td>{{$commission->admission->admission_date}}</td>
+                                                            <td>{{$commission->title}}</td>
+                                                            <td>{{$commission->claim_date}}</td>
+                                                        </tr>
+                                                    @endforeach
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <!--end table-responsive-->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end col -->
+
+                </div>
 
 
 
