@@ -129,7 +129,24 @@ Route::group(['middleware' => 'auth','namespace' => 'App\Http\Controllers'], fun
         Route::post('admission/commission/store','Admission\AdmissionController@storeCommissionRate')->name('store_commission');
         Route::get('/{id}/delete-commission','Admission\AdmissionController@deleteCommission')->name('delete_commission');
         Route::get('getcommissiondetail', 'Admission\AdmissionController@getCommissionDetail')->name('getcommissiondetail');
-        Route::post('changeStatus', 'Admission\AdmissionController@changeStatus')->name('changestatus');
+        Route::post('addcommissionclaim', 'Admission\AdmissionController@addCommissionClaim')->name('addcommissionclaim');
+
+    });
+
+    /*
+    |--------------------------------------------------------------------------
+    | Commission Claim List
+    |--------------------------------------------------------------------------
+    |
+    */
+
+    Route::group(['as' => 'commission-claim.', 'prefix' => 'commission-claim',], function () {
+        Route::get('', 'CommissionClaim\CommissionClaimController@index')->name('index');
+        Route::get('create', 'CommissionClaim\CommissionClaimController@create')->name('create');
+        Route::post('', 'CommissionClaim\CommissionClaimController@store')->name('store');
+        Route::get('{commission-claim}/edit', 'CommissionClaim\CommissionClaimController@edit')->name('edit');
+        Route::put('{commission-claim}', 'CommissionClaim\CommissionClaimController@update')->name('update');
+        Route::get('commission-claim/{id}/destroy', 'CommissionClaim\CommissionClaimController@destroy')->name('destroy');
 
     });
 

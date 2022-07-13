@@ -34,6 +34,7 @@
                     <ul class="sub-menu mm-collapse" aria-expanded="true">
                         <li><a href="{{ route('student.index')}}" aria-expanded="false"><i class="fas fa-user"></i></i> Students List</a></li>
                         <li><a href="{{ route('admission.index')}}" aria-expanded="false"><i class="fas fa-file"></i></i> Admission</a></li>
+                        <li><a href="{{ route('commission-claim.index')}}" aria-expanded="false"><i class="fas fa-file"></i></i> Commission Claim Lists</a></li>
                     </ul>
                 </li>
 

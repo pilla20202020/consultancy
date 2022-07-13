@@ -54,7 +54,7 @@
                         <div id="additernary_edu">
                             @if(isset($admission->commissions) && $admission->commissions->isEmpty() == false)
                                 @foreach ($admission->commissions as $commission)
-                                    <div class="form-group row d-flex align-items-end">.
+                                    <div class="form-group d-flex align-items-end">.
                                         <div class="col-sm-2">
                                             <label class="control-label">Title</label>
                                             <input type="text" name="title[]" class="form-control" value="{{$commission->title}}" readonly>
@@ -71,15 +71,17 @@
                                         </div>
 
                                         <div class="col-sm-2">
-                                            <label class="control-label">Commissions Status</label>
-                                            <input type="text" name="commissions_status[]" class="form-control" value="{{$commission->commissions_status}}" readonly>
+                                            <label class="control-label">Commissions Claim Status</label>
+                                            <input type="text" name="commissions_status[]" class="form-control" value="@if(isset($commission->claimCommission)){{$commission->claimCommission->commissions_claim_status}} @else pending @endif" readonly>
                                         </div>
 
-                                        <div class="col-md-1" style="margin-top: 45px;">
-                                            <a href="javascript: void(0);" data-commission_id="{{$commission->commissions_id}}" data-commission_status="{{$commission->commissions_status}}"  class="btn btn-warning btn-sm mr-1 p-2 changestatus" title="Change Status">
-                                                Change Status
-                                            </a>
-                                        </div>
+                                        @if(empty($commission->claimCommission))
+                                            <div class="col-md-2" style="margin-top: 45px;">
+                                                <a href="javascript: void(0);" data-commission_id="{{$commission->commissions_id}}" data-commission_status="{{$commission->commissions_status}}"  class="btn btn-warning btn-sm mr-1 p-2 changestatus" title="Claim Commission">
+                                                    Claim Commission
+                                                </a>
+                                            </div>
+                                        @endif
 
                                         <div class="col-md-2" style="margin-top: 45px;">
                                             <a href="{{route('admission.delete_commission',$commission->commissions_id)}}" class="btn btn-sm btn-danger mr-1 p-2" type="submit" value=""><i class="far fa-trash-alt"></i> Remove Commission</a>
@@ -147,19 +149,35 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form action="{{route('admission.changestatus')}}" method="POST" class="form form-validate floating-label">
+                    <form action="{{route('admission.addcommissionclaim')}}" method="POST" class="form form-validate floating-label">
                         @csrf
-                        <input type="hidden" class="change_status_commission" value="" name="commissions_id" id="">
+                        <input type="hidden" class="change_status_commission" value="" name="commission_id" id="">
                         <div class="row justify-content-center">
-                            <div class="col-md-12">
+                            <div class="col-md-12 mt-2">
+                                <label class="control-label">Client Name</label>
+                                <input type="text" name="client_name" class="form-control" required>
+                            </div>
+
+                            <div class="col-md-12 mt-2">
+                                <label class="control-label">Commission Claim Date</label>
+                                <input type="date" name="commission_claim_date" class="form-control" required>
+                            </div>
+
+                            <div class="col-md-12 mt-2">
+                                <label class="control-label">Remarks</label>
+                                <textarea name="claim_remarks" class="form-control" required></textarea>
+                            </div>
+
+                            <div class="col-md-12 mt-2">
                                 <label class="control-label">Status</label>
                                 <div class="">
                                     <select data-placeholder="Select Status"
                                         class="select2 tail-select form-control " id="mydropdownlist"
-                                        name="commissions_status" required>
+                                        name="commissions_claim_status" required>
                                         <option value="" selected disabled >Select Status</option>
                                         <option value="pending">Pending</option>
                                         <option value="paid" >Paid</option>
+                                        <option value="defer" >Defer</option>
 
                                     </select>
                                     @error('commissions_status')

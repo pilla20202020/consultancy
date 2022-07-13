@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admission;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admission\AdmissionRequest;
 use App\Modules\Models\Admission\Admission;
+use App\Modules\Models\ClaimCommission\ClaimCommission;
 use App\Modules\Models\Commission\Commission;
 use App\Modules\Models\Student\Student;
 use Illuminate\Http\Request;
@@ -18,13 +19,14 @@ class AdmissionController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    protected $admission, $students, $commission;
+    protected $admission, $students, $commission, $claimCommission;
 
-    function __construct(Admission $admission, Student $students, Commission $commission)
+    function __construct(Admission $admission, Student $students, Commission $commission, ClaimCommission $claimCommission)
     {
         $this->admission = $admission;
         $this->students = $students;
         $this->commission = $commission;
+        $this->claimCommission = $claimCommission;
     }
 
     public function index()
@@ -205,18 +207,28 @@ class AdmissionController extends Controller
         }
     }
 
-    public function changeStatus(Request $request) {
+    public function addCommissionClaim(Request $request) {
+
         try{
-            $commission = $this->commission->where('commissions_id',$request->commissions_id);
-            $data['commissions_status'] = $request->commissions_status;
-            if($commission->update($data)) {
-                Toastr()->success('Commission Status Updated Successfully','Success');
+            if(isset($request->defer_date) && $request->commissions_claim_status == "defer") {
+                $data['claim_date'] = $request->defer_date;
+                $data['commissions_status'] = "pending";
+                $commission = $this->commission->where('commissions_id',$request->commission_id);
+                $commission->update($data);
+            }
+            elseif($request->commissions_claim_status == "paid") {
+                $data['commissions_status'] = $request->commissions_claim_status;
+                $commission = $this->commission->where('commissions_id',$request->commission_id);
+                $commission->update($data);
+            }
+            if($claimCommission = $this->claimCommission->create($request->all())) {
+                Toastr()->success('Admission Created Successfully','Success');
                 return redirect()->back();
+
             } else {
-                Toastr()->error('There was error while updating status.','Sorry');
+                Toastr()->error('There was error while creating','Error');
                 return redirect()->back();
             }
-
         } catch (Exception $e) {
             return false;
         }
