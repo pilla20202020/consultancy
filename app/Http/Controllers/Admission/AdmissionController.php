@@ -7,6 +7,7 @@ use App\Http\Requests\Admission\AdmissionRequest;
 use App\Modules\Models\Admission\Admission;
 use App\Modules\Models\ClaimCommission\ClaimCommission;
 use App\Modules\Models\Commission\Commission;
+use App\Modules\Models\FollowUp\FollowUp;
 use App\Modules\Models\Student\Student;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -19,14 +20,15 @@ class AdmissionController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    protected $admission, $students, $commission, $claimCommission;
+    protected $admission, $students, $commission, $claimCommission, $followup;
 
-    function __construct(Admission $admission, Student $students, Commission $commission, ClaimCommission $claimCommission)
+    function __construct(Admission $admission, Student $students, Commission $commission, ClaimCommission $claimCommission, FollowUp $followup)
     {
         $this->admission = $admission;
         $this->students = $students;
         $this->commission = $commission;
         $this->claimCommission = $claimCommission;
+        $this->followup = $followup;
     }
 
     public function index()
@@ -223,6 +225,22 @@ class AdmissionController extends Controller
             }
             if($claimCommission = $this->claimCommission->create($request->all())) {
                 Toastr()->success('Admission Created Successfully','Success');
+                return redirect()->back();
+
+            } else {
+                Toastr()->error('There was error while creating','Error');
+                return redirect()->back();
+            }
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+
+
+    public function addFollowUp(Request $request) {
+        try{
+            if($followup = $this->followup->create($request->all())) {
+                Toastr()->success('Followup Created Successfully','Success');
                 return redirect()->back();
 
             } else {

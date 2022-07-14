@@ -32,6 +32,6 @@ class Commission extends Model
     }
 
     public function claimCommission(){
-        return $this->belongsTo(ClaimCommission::class,'commissions_id','commission_id');
+        return $this->belongsTo(ClaimCommission::class,'commissions_id','commission_id')->latest();
     }
 }

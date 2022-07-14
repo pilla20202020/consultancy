@@ -47,6 +47,7 @@
 
                 </div>
                 <div class="row">
+                    <!-- Upcoming Commission Pending Lists -->
                     <div class="col-xl-12 p-0">
                         <div class="card">
                             <div class="card-body">
@@ -54,15 +55,16 @@
                                 <div class="row">
                                     <div class="col-sm-12">
                                         <div class="table-responsive">
-                                            <table id="example" class="table table-hover display">
+                                            <table id="example" class="table table-hover display example">
                                                 <thead>
                                                     <tr>
                                                         <th>Student Name</th>
                                                         <th>College</th>
                                                         <th>Admission Date</th>
-                                                        <th>Upcoming Commission </th>
+                                                        <th>Commission Title</th>
                                                         <th>Commission Claim Date</th>
-                                                        <th>Claim Commission </th>
+                                                        <th>Claim Commission Status</th>
+                                                        <th>Add Follow Up </th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -74,7 +76,9 @@
                                                             <td>{{$commission->title}}</td>
                                                             <td>{{$commission->claim_date}}</td>
                                                             <td>
+
                                                                 @if(empty($commission->claimCommission))
+                                                                    <span class='badge badge-warning p-1'>{{ucfirst($commission->commissions_status)}}</span>
                                                                     <a href="javascript: void(0);" data-commission_id="{{$commission->commissions_id}}" data-commission_status="{{$commission->commissions_status}}"  class="btn btn-warning btn-sm mr-1 p-1 changestatus" title="Claim Commission">
                                                                         Claim Commission
                                                                     </a>
@@ -82,12 +86,23 @@
                                                                     <span class='badge badge-success p-1'>{{ucfirst($commission->claimCommission->commissions_claim_status)}}</span>
                                                                 @elseif($commission->claimCommission->commissions_claim_status == "pending")
                                                                     <span class='badge badge-warning p-1'>{{ucfirst($commission->claimCommission->commissions_claim_status)}}</span>
-                                                                    <a href="javascript: void(0);" data-commission_id="{{$commission->claimCommission->claim_commissions_id}}"  class="btn btn-secondary btn-sm mr-1 p-1 ml-2 addfollowup" title="Add Follow Up">
-                                                                        Add Follow Up
+                                                                    <a href="javascript: void(0);" data-commission_id="{{$commission->commissions_id}}" data-commission_status="{{$commission->commissions_status}}"  class="btn btn-warning btn-sm mr-1 p-1 changestatus" title="Claim Commission">
+                                                                        Claim Commission
                                                                     </a>
                                                                 @else
                                                                     <span class='badge badge-danger p-1'>{{ucfirst($commission->claimCommission->commissions_claim_status)}}</span>
-                                                                    <a href="javascript: void(0);" data-commission_id="{{$commission->claimCommission->claim_commissions_id}}"  class="btn btn-secondary btn-sm mr-1 p-1 ml-2 addfollowup" title="Add Follow Up">
+                                                                    <a href="javascript: void(0);" data-commission_id="{{$commission->commissions_id}}" data-commission_status="{{$commission->commissions_status}}"  class="btn btn-warning btn-sm mr-1 p-1 changestatus" title="Claim Commission">
+                                                                        Claim Commission
+                                                                    </a>
+                                                                @endif
+                                                            </td>
+                                                            <td>
+                                                                @if(isset($commission->claimCommission->commissions_claim_status) && $commission->claimCommission->commissions_claim_status == "pending")
+                                                                    <a href="javascript: void(0);" data-commission_id="{{$commission->commissions_id}}"  class="btn btn-secondary btn-sm mr-1 p-1 ml-2 addfollowup" title="Add Follow Up">
+                                                                        Add Follow Up
+                                                                    </a>
+                                                                @elseif(isset($commission->claimCommission->commissions_claim_status) && $commission->claimCommission->commissions_claim_status == "defer")
+                                                                    <a href="javascript: void(0);" data-commission_id="{{$commission->commissions_id}}"  class="btn btn-secondary btn-sm mr-1 p-1 ml-2 addfollowup" title="Add Follow Up">
                                                                         Add Follow Up
                                                                     </a>
                                                                 @endif
@@ -103,7 +118,76 @@
                             </div>
                         </div>
                     </div>
-                    <!-- end col -->
+                    <!-- Upcoming Commission Pending Lists -->
+
+                    <!-- Upcoming Follow Up Lists -->
+                    <div class="col-xl-12 p-0">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title mb-4">Upcoming Follow Up Lists</h5>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="table-responsive">
+                                            <table id="example" class="table table-hover display example1">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Student Name</th>
+                                                        <th>Follow Up Type</th>
+                                                        <th>Commission Title</th>
+                                                        <th>Commission Claim Date</th>
+                                                        <th>College</th>
+                                                        <th>Remarks</th>
+                                                        <th>Follow Up Dates</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach ($followups as $followup)
+                                                        @if(($followup->follow_up_type == "claim_commission") && ($followup->commission->commissions_status == "pending"))
+                                                            <tr>
+                                                                <td>
+                                                                    @if($followup->follow_up_type == "claim_commission")
+                                                                        {{$followup->commission->admission->student->name}}
+                                                                    @endif
+                                                                </td>
+                                                                <td>
+                                                                    @if($followup->follow_up_type == "claim_commission")
+                                                                        <span>Claim Commission</span>
+                                                                    @endif
+                                                                </td>
+                                                                <td>
+                                                                    @if($followup->follow_up_type == "claim_commission")
+                                                                        {{$followup->commission->title}}
+                                                                    @endif
+                                                                </td>
+
+                                                                <td>
+                                                                    @if($followup->follow_up_type == "claim_commission")
+                                                                        {{$followup->commission->claim_date}}
+                                                                    @endif
+                                                                </td>
+
+                                                                <td>
+                                                                    @if($followup->follow_up_type == "claim_commission")
+                                                                        {{$followup->commission->admission->college}}
+                                                                    @endif
+                                                                </td>
+                                                                <td>{{$followup->remarks}}</td>
+                                                                <td>{{$followup->next_schedule}}</td>
+
+                                                            </tr>
+                                                        @endif
+                                                    @endforeach
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <!--end table-responsive-->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Upcoming Follow Up Lists -->
+
 
                 </div>
 
@@ -112,7 +196,7 @@
         <!-- End Page-content -->
     </div>
 
-    {{-- Change Status Modal --}}
+    {{-- Change Commission Status Modal --}}
     <div class="modal fade bs-example-modal-center" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-md">
             <div class="modal-content">
@@ -177,6 +261,67 @@
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div>
+
+    {{-- Add Follow Up Modal --}}
+    <div class="modal fade add_followup" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title align-self-center mt-0 text-center" id="exampleModalLabel">Change Status</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{route('admission.addfollowup')}}" method="POST" class="form form-validate floating-label">
+                        @csrf
+                        <input type="hidden" class="change_claim_commission" value="" name="refrence_id" id="">
+                        <div class="row justify-content-center">
+                            <div class="col-md-12 mt-2">
+                                <label class="control-label">Follow Up To</label>
+                                <input type="text" name="follow_up_name" class="form-control" required>
+                            </div>
+
+
+                            <div class="col-md-12 mt-2">
+                                <label class="control-label">Follow Up Type</label>
+                                    <select data-placeholder="Select Status"
+                                        class="select2 tail-select form-control " id=""
+                                        name="follow_up_type" required>
+                                        <option value="" selected disabled >Select Follow Up Type</option>
+                                        <option value="claim_commission">Claim Commission</option>
+                                    </select>
+                            </div>
+
+                            <div class="col-md-12 mt-2">
+                                <label class="control-label">Remarks</label>
+                                <textarea name="remarks" class="form-control" required></textarea>
+                            </div>
+
+                            <div class="col-md-12 mt-2">
+                                <label class="control-label">Next Schedule</label>
+                                <input type="date" name="next_schedule" class="form-control" required>
+                            </div>
+
+                            <div class="col-md-12 mt-2">
+                                <label class="control-label">Follow Up By</label>
+                                <input type="text" name="follow_up_by" class="form-control" required>
+                            </div>
+                        </div>
+
+                        <hr>
+                        <div class="row mt-2 justify-content-center">
+                            <div class="form-group">
+                                <div>
+                                    <input type="submit" name="pageSubmit" class="btn btn-danger waves-effect waves-light" value="Submit">
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div>
 @endsection
 
 @section('page-specific-scripts')
@@ -184,10 +329,12 @@
     <script src="{{ asset('js/lightbox.js') }}"></script>
     <script>
         $(document).ready( function () {
-            $('#example').DataTable({
+            $('.example').DataTable({
                 order: [[4, 'asc'] ]
             });
+            $('.example1').DataTable();
         });
+
 
         $(document).on('click','.changestatus',function (e) {
             let commission_id = $(this).data('commission_id');
@@ -206,5 +353,12 @@
                 $('.defer_date').val(null);
             }
         })
+
+        $(document).on('click','.addfollowup',function (e) {
+            let commission_id = $(this).data('commission_id');
+            $(".change_claim_commission").val(commission_id);
+            $('.add_followup').modal('show');
+
+        });
     </script>
 @endsection

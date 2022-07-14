@@ -23,7 +23,9 @@
                                         name="student_id" required>
                                         <option value="" selected disabled >Select Students</option>
                                         @foreach ($students as $student)
+                                            @if(empty($student->admission))
                                             <option value="{{ $student->students_id }}" @if(old('student_id') == $student->students_id) selected @endif @if(isset($admission) && ($admission->student_id == $student->students_id)) selected @endif>{{ ucfirst($student->name) }}</option>
+                                            @endif
                                         @endforeach
                                     </select>
                                     @error('student_id')

@@ -2,6 +2,7 @@
 
 namespace App\Modules\Models\Student;
 
+use App\Modules\Models\Admission\Admission;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -19,4 +20,10 @@ class Student extends Model
         'program',
         'intake',
     ];
+
+    public function admission(){
+        return $this->belongsTo(Admission::class,'students_id','student_id');
+    }
+
+
 }

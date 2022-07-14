@@ -130,6 +130,7 @@ Route::group(['middleware' => 'auth','namespace' => 'App\Http\Controllers'], fun
         Route::get('/{id}/delete-commission','Admission\AdmissionController@deleteCommission')->name('delete_commission');
         Route::get('getcommissiondetail', 'Admission\AdmissionController@getCommissionDetail')->name('getcommissiondetail');
         Route::post('addcommissionclaim', 'Admission\AdmissionController@addCommissionClaim')->name('addcommissionclaim');
+        Route::post('addfollowup', 'Admission\AdmissionController@addFollowUp')->name('addfollowup');
 
     });
 
