@@ -224,7 +224,7 @@ class AdmissionController extends Controller
                 $commission->update($data);
             }
             if($claimCommission = $this->claimCommission->create($request->all())) {
-                Toastr()->success('Admission Created Successfully','Success');
+                Toastr()->success('Commission Created Successfully','Success');
                 return redirect()->back();
 
             } else {

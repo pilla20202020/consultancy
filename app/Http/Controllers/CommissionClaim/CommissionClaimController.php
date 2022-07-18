@@ -30,8 +30,14 @@ class CommissionClaimController extends Controller
     public function index()
     {
         //
-        $claimCommissions = $this->claimCommission->paginate();
-        return view('claimcommission.index', compact('claimCommissions'));
+        $commissions = $this->commission->where('commissions_status','!=','paid')->paginate();
+        return view('claimcommission.index', compact('commissions'));
+    }
+
+    public function claimed()
+    {
+        $commissions = $this->commission->where('commissions_status','paid')->paginate();
+        return view('claimcommission.claimed', compact('commissions'));
     }
 
     /**

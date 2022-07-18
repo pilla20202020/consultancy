@@ -29,5 +29,10 @@ class Admission extends Model
         return $this->hasMany(Commission::class,'admission_id','admissions_id')->orderBy('commissions_id');
     }
 
+    public function claimCommission()
+    {
+        return $this->hasMany(Commission::class,'admission_id','admissions_id')->orderBy('claim_date')->where('commissions_status','pending');
+    }
+
 
 }
