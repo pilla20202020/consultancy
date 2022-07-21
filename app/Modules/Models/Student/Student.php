@@ -18,7 +18,8 @@ class Student extends Model
         'email',
         'phone',
         'program',
-        'intake',
+        'intake_year',
+        'intake_month',
     ];
 
     public function admission(){

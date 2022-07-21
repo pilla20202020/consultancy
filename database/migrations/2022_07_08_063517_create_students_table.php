@@ -18,7 +18,6 @@ class CreateStudentsTable extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->string('phone');
-            $table->date('intake');
             $table->string('program');
             $table->string('display_order')->nullable();
             $table->string('remarks')->nullable();

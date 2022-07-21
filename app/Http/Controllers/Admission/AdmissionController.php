@@ -6,8 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admission\AdmissionRequest;
 use App\Modules\Models\Admission\Admission;
 use App\Modules\Models\ClaimCommission\ClaimCommission;
+use App\Modules\Models\College\College;
 use App\Modules\Models\Commission\Commission;
+use App\Modules\Models\Country\Country;
 use App\Modules\Models\FollowUp\FollowUp;
+use App\Modules\Models\State\State;
 use App\Modules\Models\Student\Student;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -20,15 +23,16 @@ class AdmissionController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    protected $admission, $students, $commission, $claimCommission, $followup;
+    protected $admission, $students, $commission, $claimCommission, $followup, $country;
 
-    function __construct(Admission $admission, Student $students, Commission $commission, ClaimCommission $claimCommission, FollowUp $followup)
+    function __construct(Admission $admission, Student $students, Commission $commission, ClaimCommission $claimCommission, FollowUp $followup, Country $country)
     {
         $this->admission = $admission;
         $this->students = $students;
         $this->commission = $commission;
         $this->claimCommission = $claimCommission;
         $this->followup = $followup;
+        $this->country = $country;
     }
 
     public function index()
@@ -36,6 +40,12 @@ class AdmissionController extends Controller
         //
         $admissions = $this->admission->paginate();
         return view('admission.index', compact('admissions'));
+    }
+
+    public function getCommencedAdmission()
+    {
+        $admissions = $this->admission->whereNotNull('commenced_date')->where('commenced_status','applied')->paginate();
+        return view('commenced_admission.index', compact('admissions'));
     }
 
     /**
@@ -47,7 +57,8 @@ class AdmissionController extends Controller
     {
         //
         $students =$this->students->paginate();
-        return view('admission.create',compact('students'));
+        $countries = $this->country->where('status','Active')->get();
+        return view('admission.create',compact('students','countries'));
     }
 
     /**
@@ -96,7 +107,10 @@ class AdmissionController extends Controller
         //
         $admission = $this->admission->where('admissions_id',$admission)->first();
         $students =$this->students->paginate();
-        return view('admission.edit', compact('admission','students'));
+        $countries = $this->country->where('status','Active')->get();
+        $states = State::where('status','Active')->get();
+        $colleges = College::where('status','Active')->get();
+        return view('admission.edit', compact('admission','students','countries','states','colleges'));
     }
 
     /**
@@ -138,12 +152,44 @@ class AdmissionController extends Controller
         return redirect()->route('admission.index')->withSuccess(trans('Admission has been deleted'));
     }
 
+    public function addCommencement(Request $request) {
+
+        try{
+            $admission = $this->admission->where('student_id',$request->student_id)->whereNotNull('commenced_date')->where('commenced_status','applied')->get();
+            if(!$admission->isEmpty()) {
+                Toastr()->error('The requested student has already commenced to another college','Error');
+                return redirect()->back();
+            } else {
+                $admission = $this->admission->where('admissions_id',$request->admission_id);
+                $data['commenced_date'] = $request->commenced_date;
+                $data['commenced_status'] = "applied";
+                if($admission->update($data)) {
+                    Toastr()->success('Commenced Added Successfully','Success');
+                    return redirect()->back();
+                } else {
+                    Toastr()->success('There was error while adding commencement','Error');
+                    return redirect()->back();
+                }
+            }
+
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+
     public function verifyAdmissionofStudent($request){
         $student_id = $request->student_id;
-        $admission = $this->admission->where('student_id',$student_id)->first();
-        if(isset($admission)) {
+        $admission = $this->admission->where('student_id',$student_id)->whereNotNull('commenced_date')->where('commenced_status','applied')->get();
+        if(!$admission->isEmpty()) {
             Toastr()->error('The student has already admitted to the college.','Sorry');
             return false;
+        } else {
+            $admission = $this->admission->where('student_id',$student_id)->where('college_id',$request->college_id)->get();
+            if(!$admission->isEmpty()) {
+                Toastr()->error('The student has already applied for this college.','Sorry');
+                return false;
+            }
+
         }
         return true;
     }
@@ -173,7 +219,7 @@ class AdmissionController extends Controller
                 $p = $p + 1;
             }
             Toastr()->success('Commission Updated Successfully','Success');
-            return redirect()->route('admission.index');
+            return redirect()->route('getcommencedadmission.index');
         } catch(Exception $e) {
             return null;
         }

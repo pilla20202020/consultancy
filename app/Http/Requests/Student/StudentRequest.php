@@ -35,7 +35,8 @@ class StudentRequest extends FormRequest
             'email'  => $this->get('email'),
             'phone'  => $this->get('phone'),
             'program'  => $this->get('program'),
-            'intake'  => $this->get('intake'),
+            'intake_year'  => $this->get('intake_year'),
+            'intake_month'  => $this->get('intake_month'),
         ];
 
         return $data;

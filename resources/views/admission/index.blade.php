@@ -27,8 +27,9 @@
                         <tr>
                             <th>S.No.</th>
                             <th>Student</th>
+                            <th>Country/State</th>
                             <th>College</th>
-                            <th>Admission Date</th>
+                            <th>Intake</th>
                             <th>Program</th>
                             <th>Fee</th>
                             <th>Actions</th>
@@ -144,6 +145,42 @@
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div>
+
+    {{-- Add Commencement Modal --}}
+    <div class="modal fade addcommencementmodal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title align-self-center mt-0 text-center" id="exampleModalLabel">Add Commencement</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{route('admission.addcommencement')}}" method="GET" class="form form-validate floating-label">
+                        @csrf
+                        <input type="hidden" class="add_commencement_id" value="" name="admission_id" id="">
+                        <input type="hidden" class="student_commencement" value="" name="student_id" id="">
+                        <div class="row justify-content-center">
+                            <div class="col-md-12 mt-2">
+                                <label class="control-label">Commencement Date</label>
+                                <input type="date" name="commenced_date" class="form-control" required>
+                            </div>
+                        </div>
+
+                        <hr>
+                        <div class="row mt-2 justify-content-center">
+                            <div class="form-group">
+                                <div>
+                                    <input type="submit" name="pageSubmit" class="btn btn-danger waves-effect waves-light" value="Submit">
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div>
 @endsection
 @section('page-specific-scripts')
     <script src="{{ asset('js/datatables.min.js') }}"></script>
@@ -209,6 +246,16 @@
                 $('.defer_date').val(null);
             }
         })
+
+        $(document).on('click','.addcommencement',function (e) {
+            var admission_id = $(this).data('admission_id');
+            var student_id = $(this).next('.student_id').val();
+            $(".add_commencement_id").val(admission_id);
+            $(".student_commencement").val(student_id);
+
+            $('.addcommencementmodal').modal('show');
+
+        });
 
 
     </script>

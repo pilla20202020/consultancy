@@ -29,6 +29,7 @@
                             <th>Name</th>
                             <th>Email</th>
                             <th>Phone</th>
+                            <th>Prefered Intake</th>
                             <th>Actions</th>
                         </tr>
                         </thead>

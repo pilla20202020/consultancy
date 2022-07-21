@@ -90,6 +90,61 @@ Route::group(['middleware' => 'auth','namespace' => 'App\Http\Controllers'], fun
         Route::get('permission/{id}/destroy', 'Permission\PermissionController@destroy')->name('destroy')->middleware('permission:permission-delete');
     });
 
+    /*
+    |--------------------------------------------------------------------------
+    | Country CRUD
+    |--------------------------------------------------------------------------
+    |
+    */
+
+    Route::group(['as' => 'countries.', 'prefix' => 'country',], function () {
+        Route::get('', 'Country\CountryController@index')->name('index');
+        Route::get('country-data', 'Country\CountryController@getAllData')->name('data');
+        Route::get('change-status','Country\CountryController@changeStatus')->name('change_status');
+    });
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | State CRUD
+    |--------------------------------------------------------------------------
+    |
+    */
+
+    Route::group(['as' => 'states.', 'prefix' => 'state',], function () {
+        Route::get('', 'State\StateController@index')->name('index');
+        Route::get('state-data', 'State\StateController@getAllData')->name('data');
+        Route::get('create', 'State\StateController@create')->name('create');
+        Route::post('', 'State\StateController@store')->name('store');
+        Route::get('{state}/edit', 'State\StateController@edit')->name('edit');
+        Route::put('{state}', 'State\StateController@update')->name('update');
+        Route::get('change-status','State\StateController@changeStatus')->name('change_status');
+    });
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | College CRUD
+    |--------------------------------------------------------------------------
+    |
+    */
+
+    Route::group(['as' => 'colleges.', 'prefix' => 'college',], function () {
+        Route::get('', 'College\CollegeController@index')->name('index');
+        Route::get('college-data', 'College\CollegeController@getAllData')->name('data');
+        Route::get('get-state', 'College\CollegeController@getStates')->name('get_states');
+        Route::get('create', 'College\CollegeController@create')->name('create');
+        Route::post('', 'College\CollegeController@store')->name('store');
+        Route::get('{college}/edit', 'College\CollegeController@edit')->name('edit');
+        Route::put('{college}', 'College\CollegeController@update')->name('update');
+        Route::get('change-status','College\CollegeController@changeStatus')->name('change_status');
+    });
+
+    Route::group(['as'=>'common.', 'prefix'=>'common'], function(){
+        Route::post('provinces', 'Common\CommonController@getStatesByCountryId')->name('state.countryId');
+        Route::post('districts', 'Common\CommonController@getCollegesByStateId')->name('college.provinceId');
+    });
+
 
     /*
     |--------------------------------------------------------------------------
@@ -125,8 +180,11 @@ Route::group(['middleware' => 'auth','namespace' => 'App\Http\Controllers'], fun
         Route::get('{admission}/edit', 'Admission\AdmissionController@edit')->name('edit');
         Route::put('{admission}', 'Admission\AdmissionController@update')->name('update');
         Route::get('admission/{id}/destroy', 'Admission\AdmissionController@destroy')->name('destroy');
-        Route::get('admission/commission-rate/{id}/', 'Admission\AdmissionController@commissionRate')->name('commission');
-        Route::post('admission/commission/store','Admission\AdmissionController@storeCommissionRate')->name('store_commission');
+        Route::get('addcommencement', 'Admission\AdmissionController@addCommencement')->name('addcommencement');
+        Route::get('getcommencementlist', 'Admission\AdmissionController@getCommencedAdmission')->name('getcommencedadmission');
+
+        Route::get('commission-rate/{id}/', 'Admission\AdmissionController@commissionRate')->name('commission');
+        Route::post('commission/store','Admission\AdmissionController@storeCommissionRate')->name('store_commission');
         Route::get('/{id}/delete-commission','Admission\AdmissionController@deleteCommission')->name('delete_commission');
         Route::get('getcommissiondetail', 'Admission\AdmissionController@getCommissionDetail')->name('getcommissiondetail');
         Route::post('addcommissionclaim', 'Admission\AdmissionController@addCommissionClaim')->name('addcommissionclaim');

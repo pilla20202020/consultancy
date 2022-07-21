@@ -1,11 +1,10 @@
 @section('page-specific-styles')
     <link href="{{ asset('css/dropify.min.css') }}" rel="stylesheet">
-    <link type="text/css" rel="stylesheet"
-          href="{{ asset('resources/css/theme-default/libs/bootstrap-tagsinput/bootstrap-tagsinput.css?1424887862')}}"/>
+    <link type="text/css" rel="stylesheet" href="{{ asset('resources/css/theme-default/libs/bootstrap-tagsinput/bootstrap-tagsinput.css?1424887862')}}"/>
 @endsection
 @csrf
 <div class="row">
-    <div class="col-sm-9">
+    <div class="col-sm-12">
         <div class="card">
             <div class="card-underline">
                 <div class="card-head">
@@ -23,9 +22,7 @@
                                         name="student_id" required>
                                         <option value="" selected disabled >Select Students</option>
                                         @foreach ($students as $student)
-                                            @if(empty($student->admission))
                                             <option value="{{ $student->students_id }}" @if(old('student_id') == $student->students_id) selected @endif @if(isset($admission) && ($admission->student_id == $student->students_id)) selected @endif>{{ ucfirst($student->name) }}</option>
-                                            @endif
                                         @endforeach
                                     </select>
                                     @error('student_id')
@@ -34,29 +31,54 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
 
-                        <div class="col-sm-6">
+                    <div class="row">
+                        <div class="col-sm-4">
                             <div class="form-group">
-                                <label for="province" class="col-form-label pt-0">Select College <span class="text-danger">*</span></label>
+                                <label for="country" class="form-label">Country</label>
+                                <select name="country_id" id="country_dropdown" class="form-control" required >
+                                    <option value="#" selected disabled>Choose country</option>
+                                    @foreach ($countries as $country)
+                                        <option value="{{$country->id}}" @if(old('country_id') == $country->id) selected @endif @if(isset($admission) && ($admission->country_id == $country->id)) selected @endif>{{$country->country_name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label for="country" class="form-label">State</label>
+                                <select name="state_id" id="state_dropdown" class="form-control" required>
+                                    @if(isset($admission))
+                                        @foreach ($states as $state)
+                                            <option value="{{$state->id}}" @if(old('state_id') == $state->id) selected @endif @if(isset($admission) && ($admission->state_id == $state->id)) selected @endif>{{$state->state_name}}</option>
+                                        @endforeach
+                                    @endif
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label for="college_id" class="col-form-label pt-0">Select College</label>
                                 <div class="">
                                     <select data-placeholder="Select College"
-                                        class="select2 tail-select form-control " id=""
-                                        name="college" required>
-                                        <option value="" selected disabled >Select College</option>
-                                        <option value="ABC" {{ old('college') == 'ABC' ? 'selected' : '' }} @if(isset($admission) && $admission->college == "ABC" ) selected @endif>ABC</option>
-                                        <option value="XYZ" {{ old('college') == 'XYZ' ? 'selected' : '' }} @if(isset($admission) && $admission->college == "XYZ" ) selected @endif>XYZ</option>
-
+                                        class="tail-select form-control college_class" id="college_id"
+                                        name="college_id" >
+                                        <option value="" selected disabled>Select College</option>
+                                        @if(isset($admission))
+                                            @foreach ($colleges as $college)
+                                                <option value="{{$college->id}}" @if(old('college_id') == $college->id) selected @endif @if(isset($admission) && ($admission->college_id == $college->id)) selected @endif>{{$college->name}}</option>
+                                            @endforeach
+                                        @endif
                                     </select>
-                                    @error('college')
-                                        <span class="text-danger">{{ $errors->first('college') }}</span>
-                                    @enderror
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     <div class="row">
-                        <div class="col-sm-6">
+                        <div class="col-sm-4">
                             <div class="form-group ">
                                 <label for="fees" class="col-form-label pt-0">Fees</label>
                                 <div class="">
@@ -66,12 +88,41 @@
                             </div>
                         </div>
 
-                        <div class="col-sm-6">
+                        <div class="col-sm-4">
                             <div class="form-group ">
-                                <label for="admission_date" class="col-form-label pt-0">Admission Date</label>
+                                <label for="intake_year" class="col-form-label pt-0">Intake(Year)</label>
                                 <div class="">
-                                    <input class="form-control" type="date" name="admission_date" data-role="tagsinput"
-                                    value="{{ old('admission_date', isset($admission->admission_date) ? $admission->admission_date : '') }}" placeholder="Enter a Admission Date">
+                                    <select data-placeholder="Select Year"
+                                        class="select2 tail-select form-control " id=""
+                                        name="intake_year" required>
+                                        <option value="" selected disabled >Select Intake Year</option>
+                                        <option value="2022" {{ old('intake_year') == '2022' ? 'selected' : '' }} @if(isset($student) && $student->intake_year == "2022" ) selected @endif>2022</option>
+                                        <option value="2023" {{ old('intake_year') == '2023' ? 'selected' : '' }} @if(isset($student) && $student->intake_year == "2023" ) selected @endif>2023</option>
+
+                                    </select>
+                                    @error('intake_year')
+                                        <span class="text-danger">{{ $errors->first('intake_year') }}</span>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-4">
+                            <div class="form-group ">
+                                <label for="intake_month" class="col-form-label pt-0">Intake(Month)</label>
+                                <div class="">
+                                    <select data-placeholder="Select Intake Month"
+                                        class="select2 tail-select form-control " id=""
+                                        name="intake_month" required>
+                                        <option value="" selected disabled >Select Intake Month</option>
+                                        <option value="february" {{ old('intake_month') == 'february' ? 'selected' : '' }} @if(isset($student) && $student->intake_month == "february" ) selected @endif>February</option>
+                                        <option value="august" {{ old('intake_month') == 'august' ? 'selected' : '' }} @if(isset($student) && $student->intake_month == "august" ) selected @endif>August</option>
+                                        <option value="september" {{ old('intake_month') == 'september' ? 'selected' : '' }} @if(isset($student) && $student->intake_month == "september" ) selected @endif>September</option>
+
+                                    </select>
+                                    @error('intake_month')
+                                        <span class="text-danger">{{ $errors->first('intake_month') }}</span>
+                                    @enderror
                                 </div>
                             </div>
                         </div>
@@ -111,6 +162,60 @@
 
         $(document).ready(function() {
             $('.select2').select2();
+        });
+    </script>
+
+    <script>
+        $(document).ready(function(){
+            $('#country_dropdown').select2();
+            $('#state_dropdown').select2();
+            $('#college_id').select2();
+
+
+            $('#country_dropdown').on('change',function(e){
+            e.preventDefault();
+            var country_id = $(this).val();
+            // alert(country_id);
+                $.ajax({
+                    type: "GET",
+                    url: "{{route('colleges.get_states')}}",
+                    data: {
+                        'country_id': country_id
+                    },
+                    dataType: "json",
+                    success: function(response){
+                        // console.log(response);
+                        $('#state_dropdown').html('<option value="#" selected disabled>Choose State</option>');
+                        $.each(response.message, function(key,value){
+                            $('#state_dropdown').append('<option value='+value.id+'>'+value.state_name+'</option>');
+                        });
+                    }
+                });
+            });
+
+            $('#state_dropdown').on('change', function(e) {
+                e.preventDefault();
+                var state_id = $(this).val();
+                var body = "";
+                $.ajax({
+                    type: 'POST',
+                    url: "{{route('common.college.provinceId')}}",
+                    data: {
+                        _token: $("meta[name='csrf-token']").attr('content'),
+                        state_id: state_id,
+                    },
+                    success: function(response) {
+                        $('#college_id').html('');
+                        body = '<option value="" selected disabled>Select College</option>';
+                        if (response.colleges) {
+                            $.each(response.colleges, function(key, college) {
+                                body += "<option value='" + college['id'] + "'>" + college['name'] + "</option>";
+                            });
+                            $('#college_id').html(body);
+                        }
+                    }
+                })
+            })
         });
     </script>
 @endsection

@@ -16,11 +16,11 @@
                     <h5 class="card-title">Add Commission Rate of {{$admission->student->name}}<span class="text-danger">
                             </span></h5>
                     <div class="row mt-5">
-                        <div class="col-sm-3 form-group">
+                        <div class="col-sm-4 form-group">
                             <label for="name" class="pt-0">Student Name: </label>
                             <span> {{$admission->student->name}}</span>
                         </div>
-                        <div class="col-sm-3 form-group">
+                        <div class="col-sm-4 form-group">
                             <label for="name" class="pt-0">Student Contact Number: </label>
                             <span> {{$admission->student->phone}}</span>
                         </div>
@@ -28,12 +28,25 @@
 
                     <div class="row">
                         <div class="col-sm-3 form-group">
+                            <label for="name" class="pt-0">Country: </label>
+                            <span> {{ $admission->country->country_name }}</span>
+                        </div>
+
+                        <div class="col-sm-3 form-group">
+                            <label for="name" class="pt-0">State: </label>
+                            <span> {{ $admission->state->state_name }}</span>
+                        </div>
+                        <div class="col-sm-3 form-group">
                             <label for="name" class="pt-0">College/Uni: </label>
-                            <span> {{ $admission->college }}</span>
+                            <span> {{ $admission->college->name }}</span>
+                        </div>
+                        <div class="col-sm-3 form-group">
+                            <label for="name" class="pt-0">Intake : </label>
+                            <span> {{ucfirst($admission->intake_month)}},{{ $admission->intake_year }}</span>
                         </div>
                         <div class="col-sm-3 form-group">
                             <label for="name" class="pt-0">Admission Date: </label>
-                            <span> {{ $admission->admission_date }}</span>
+                            <span> {{ $admission->commenced_date }}</span>
                         </div>
                         <div class="col-sm-3 form-group">
                             <label for="name" class="pt-0">Overall Fees: </label>
@@ -154,7 +167,7 @@
                         <input type="hidden" class="change_status_commission" value="" name="commission_id" id="">
                         <div class="row justify-content-center">
                             <div class="col-md-12 mt-2">
-                                <label class="control-label">Client Name</label>
+                                <label class="control-label">Receipt To</label>
                                 <input type="text" name="client_name" class="form-control" required>
                             </div>
 

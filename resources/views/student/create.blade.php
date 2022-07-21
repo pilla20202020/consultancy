@@ -5,7 +5,7 @@
 @section('content')
     <section>
         <div class="section-body">
-            <form class="form form-validate floating-label" action="{{route('student.store')}}" method="POST" enctype="multipart/form-data" novalidate>
+            <form class="form form-validate floating-label" action="{{route('student.store')}}" method="POST" enctype="multipart/form-data">
             @include('student.partials.form',['header' => 'Create a Student'])
             </form>
         </div>

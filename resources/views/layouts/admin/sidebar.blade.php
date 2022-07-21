@@ -28,14 +28,27 @@
 
                 <li>
                     <a href="javascript: void(0);" class="has-arrow" aria-expanded="false">
+                        <i class="mdi mdi-settings-outline"></i>
+                        <span>Config</span>
+                    </a>
+                    <ul class="sub-menu mm-collapse" aria-expanded="true">
+                        <li><a href="{{ route('countries.index')}}" aria-expanded="false"><i class="fas fa-hand-point-right"></i>Countries</a></li>
+                        <li><a href="{{ route('states.index')}}" aria-expanded="false"><i class="fas fa-hand-point-right"></i>States</a></li>
+                        <li><a href="{{ route('colleges.index')}}" aria-expanded="false"><i class="fas fa-hand-point-right"></i>Colleges</a></li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="javascript: void(0);" class="has-arrow" aria-expanded="false">
                         <i class="mdi mdi-warehouse"></i>
                         <span>Agency</span>
                     </a>
                     <ul class="sub-menu mm-collapse" aria-expanded="true">
-                        <li><a href="{{ route('student.index')}}" aria-expanded="false"><i class="fas fa-user"></i></i> Students List</a></li>
-                        <li><a href="{{ route('admission.index')}}" aria-expanded="false"><i class="fas fa-user-graduate"></i></i> Admission</a></li>
-                        <li><a href="{{ route('commission-claim.index')}}" aria-expanded="false"><i class="fas fa-calendar-times"></i></i> Commission Scheduled Lists</a></li>
-                        <li><a href="{{ route('commission-claim.claimed')}}" aria-expanded="false"><i class="fas fa-dollar-sign"></i></i> Commission Claimed</a></li>
+                        <li><a href="{{ route('student.index')}}" aria-expanded="false"><i class="fas fa-users"></i> Students List</a></li>
+                        <li><a href="{{ route('admission.index')}}" aria-expanded="false"><i class="fas fa-university "></i> Admission</a></li>
+                        <li><a href="{{ route('admission.getcommencedadmission')}}" aria-expanded="false"><i class="fas fa-user-graduate"></i> Commenced Admission</a></li>
+                        <li><a href="{{ route('commission-claim.index')}}" aria-expanded="false"><i class="fas fa-calendar-times"></i> Commission Scheduled Lists</a></li>
+                        <li><a href="{{ route('commission-claim.claimed')}}" aria-expanded="false"><i class="fas fa-dollar-sign"></i> Commission Claimed</a></li>
                     </ul>
                 </li>
 

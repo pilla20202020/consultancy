@@ -25,9 +25,12 @@ class AdmissionRequest extends FormRequest
     {
         $rules = [
             'student_id'=>'required',
-            'college' => 'required|',
+            'country_id' => 'required|',
+            'state_id' => 'required|',
+            'college_id' => 'required|',
             'fees' => 'required|',
-            'admission_date' => 'required|',
+            'intake_year' => 'required|',
+            'intake_month' => 'required|',
         ];
 
         return $rules;
@@ -37,9 +40,12 @@ class AdmissionRequest extends FormRequest
     {
         $data = [
             'student_id' => $this->get('student_id'),
-            'college'  => $this->get('college'),
+            'college_id'  => $this->get('college_id'),
             'fees'  => $this->get('fees'),
-            'admission_date'  => $this->get('admission_date'),
+            'country_id'  => $this->get('country_id'),
+            'state_id'  => $this->get('state_id'),
+            'intake_year'  => $this->get('intake_year'),
+            'intake_month'  => $this->get('intake_month'),
         ];
 
         return $data;

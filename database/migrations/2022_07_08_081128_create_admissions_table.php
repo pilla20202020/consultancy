@@ -15,10 +15,8 @@ class CreateAdmissionsTable extends Migration
     {
         Schema::create('tbl_admissions', function (Blueprint $table) {
             $table->id('admissions_id');
-            $table->string('college');
             $table->bigInteger('student_id')->unsigned()->index()->nullable();
             $table->foreign('student_id')->references('students_id')->on('tbl_students')->onUpdate('cascade')->onDelete('cascade');
-            $table->date('admission_date');
             $table->string('fees');
             $table->string('display_order')->nullable();
             $table->string('remarks')->nullable();

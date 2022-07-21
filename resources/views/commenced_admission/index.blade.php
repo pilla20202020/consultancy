@@ -6,13 +6,19 @@
     <link rel="stylesheet" href="{{ asset('css/lightbox.css') }}"/>
 @endsection
 
-@section('title', 'Claim Commission List')
+@section('title', 'Admission List')
 
 @section('content')
     <div class="row">
         <div class="col-12">
             <div class="d-flex">
-                <header class="text-capitalize pt-1">Claim Commission List</header>
+                <header class="text-capitalize pt-1">admission List</header>
+                <div class="tools ml-auto">
+                    <a class="btn btn-primary ink-reaction" href="{{ route('admission.create') }}">
+                        <i class="md md-add"></i>
+                        Add admission
+                    </a>
+                </div>
             </div>
             <div class="card mt-2 p-4">
                 <div class="table-responsive">
@@ -21,74 +27,52 @@
                         <tr>
                             <th>S.No.</th>
                             <th>Student</th>
+                            <th>Country/State</th>
                             <th>College</th>
-                            <th>Commission Date</th>
+                            <th>Intake</th>
                             <th>Program</th>
-                            <th>Commission Price</th>
-                            <th>Recently Claim Date</th>
-                            <th>Commission Status</th>
-                            <th>Add Follow Up</th>
+                            <th>Fee</th>
+                            <th>Actions</th>
                         </tr>
                         </thead>
                         <tbody>
-                            @foreach ($commissions as $key => $commission)
-                            <tr>
-                                <td>{{++$key}}</td>
-                                <td>{{ Str::limit($commission->student->name, 47) }}</td>
-                                <td>{{ Str::limit($commission->admission->college->name, 47) }}</td>
-                                <td>{{ $commission->claim_date }}</td>
-                                <td>{{ Str::limit($commission->student->program, 47) }}</td>
-                                <td>{{ $commission->fees }}</td>
-                                <td>
-                                    @if(isset($commission->claimCommission))
-                                        {{$commission->claimCommission->commission_claim_date }}
-                                    @endif
-                                </td>
-                                <td>
-                                    @if(isset($commission->claimCommission))
-
-                                        @if($commission->claimCommission->commissions_claim_status == "pending")
-                                            <span class='badge badge-warning p-1'>{{ucfirst($commission->claimCommission->commissions_claim_status)}}</span>
-                                            <button data-commission_id="{{$commission->commissions_id}}"  class="btn btn-warning btn-sm changestatus mt-1" title="Claim Commission">
-                                                Claim Commission
-                                            </button>
-                                            <input type="hidden" class="upcoming_commission_date" value="{{$commission->claim_date}}">
-                                            <input type="hidden" class="upcoming_commission_title" value="{{$commission->title}}">
-                                        @else
-                                            <span class='badge badge-danger p-1'>{{ucfirst($commission->claimCommission->commissions_claim_status)}}</span>
-                                            <button data-commission_id="{{$commission->commissions_id}}"  class="btn btn-warning btn-sm changestatus mt-1" title="Claim Commission">
-                                                Claim Commission
-                                            </button>
-                                            <input type="hidden" class="upcoming_commission_date" value="{{$commission->claim_date}}">
-                                            <input type="hidden" class="upcoming_commission_title" value="{{$commission->title}}">
-                                        @endif
-                                    @else
-                                        <span class='badge badge-warning p-1'>Pending</span>
-                                        <button data-commission_id="{{$commission->commissions_id}}"  class="btn btn-warning btn-sm changestatus mt-1" title="Claim Commission">
-                                            Claim Commission
-                                        </button>
-                                        <input type="hidden" class="upcoming_commission_date" value="{{$commission->claim_date}}">
-                                        <input type="hidden" class="upcoming_commission_title" value="{{$commission->title}}">
-                                    @endif
-                                </td>
-
-                                <td>
-                                    @if(isset($commission->claimCommission))
-                                        <a href="javascript: void(0);" data-commission_id="{{$commission->claimCommission->claim_commissions_id}}"  class="btn btn-secondary btn-sm mr-1 p-1 ml-2 addfollowup" title="Add Follow Up">
-                                            Add Follow Up
-                                        </a>
-                                    @endif
-                                </td>
-
-
-                            </tr>
-                            @endforeach
+                            @each('commenced_admission.partials.table', $admissions, 'admission')
                         </tbody>
 
                     </table>
                 </div>
             </div>
         </div>
+    </div>
+
+    {{-- View Payment Modal --}}
+    <div class="modal fade paymentmodal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title align-self-center mt-0 text-center" id="exampleModalLabel">View Payment History</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-bordered">
+                        <thead class="thead-light">
+                            <tr>
+                                <th>S.No.</th>
+                                <th>Title</th>
+                                <th>Fees</th>
+                                <th>Claim Date</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="studentadmission">
+
+                        </tbody>
+                    </table>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
     </div>
 
     {{-- Change Commission Status Modal --}}
@@ -161,6 +145,42 @@
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div>
+
+    {{-- Add Commencement Modal --}}
+    <div class="modal fade addcommencementmodal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title align-self-center mt-0 text-center" id="exampleModalLabel">Add Commencement</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{route('admission.addcommencement')}}" method="GET" class="form form-validate floating-label">
+                        @csrf
+                        <input type="hidden" class="add_commencement_id" value="" name="admission_id" id="">
+                        <input type="hidden" class="student_commencement" value="" name="student_id" id="">
+                        <div class="row justify-content-center">
+                            <div class="col-md-12 mt-2">
+                                <label class="control-label">Commencement Date</label>
+                                <input type="date" name="commenced_date" class="form-control" required>
+                            </div>
+                        </div>
+
+                        <hr>
+                        <div class="row mt-2 justify-content-center">
+                            <div class="form-group">
+                                <div>
+                                    <input type="submit" name="pageSubmit" class="btn btn-danger waves-effect waves-light" value="Submit">
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div>
 @endsection
 @section('page-specific-scripts')
     <script src="{{ asset('js/datatables.min.js') }}"></script>
@@ -168,6 +188,42 @@
     <script>
         $(document).ready( function () {
             $('#example').DataTable();
+        });
+
+        $(document).on('click','.viewhistory',function (e) {
+            let admission_id = $(this).data('admission_id');
+            $.ajax({
+                type: 'get',
+                url: '{{route('admission.getcommissiondetail')}}',
+                data: {
+                    admission_id: admission_id,
+                },
+                success:function(response){
+                if(typeof(response) != 'object'){
+                    response = JSON.parse(response)
+                }
+                var tbody_html = "";
+                if(response.status){
+                    $.each(response.data, function(key, commission_detail){
+                        key = key+1;
+                        tbody_html += "<tr>";
+                        tbody_html += "<td>"+key+"</td>";
+                        tbody_html += "<td>"+commission_detail.title+"</td>";
+                        tbody_html += "<td>"+commission_detail.fees+"</td>";
+                        tbody_html += "<td>"+commission_detail.claim_date+"</td>";
+                        if(commission_detail.commissions_status == "pending") {
+                            tbody_html += "<td><span class='badge badge-danger p-2'>Pending</span></td>";
+                        } else {
+                            tbody_html += "<td><span class='badge badge-success p-2'>Paid</span></td>";
+                        }
+                        tbody_html += "</tr>";
+                    });
+                    $('#studentadmission').html(tbody_html);
+                    $('.paymentmodal').modal('show');
+                }
+            }
+
+            })
         });
 
         $(document).on('click','.changestatus',function (e) {
@@ -190,6 +246,16 @@
                 $('.defer_date').val(null);
             }
         })
+
+        $(document).on('click','.addcommencement',function (e) {
+            var admission_id = $(this).data('admission_id');
+            var student_id = $(this).next('.student_id').val();
+            $(".add_commencement_id").val(admission_id);
+            $(".student_commencement").val(student_id);
+
+            $('.addcommencementmodal').modal('show');
+
+        });
 
 
     </script>

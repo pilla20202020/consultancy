@@ -38,7 +38,7 @@
                                 <label for="specialization" class="col-form-label pt-0">Email</label>
                                 <div class="">
                                     <input class="form-control" type="email" name="email" data-role="tagsinput"
-                                    value="{{ old('email', isset($student->email) ? $student->email : '') }}" placeholder="Enter a email">
+                                    value="{{ old('email', isset($student->email) ? $student->email : '') }}" placeholder="Enter a email" required>
                                 </div>
                             </div>
                         </div>
@@ -48,29 +48,58 @@
                                 <label for="phone" class="col-form-label pt-0">Phone Number</label>
                                 <div class="">
                                     <input class="form-control" type="number" name="phone" data-role="tagsinput"
-                                    value="{{ old('phone', isset($student->phone) ? $student->phone : '') }}" placeholder="Enter a Phone">
+                                    value="{{ old('phone', isset($student->phone) ? $student->phone : '') }}" placeholder="Enter a Phone" required>
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     <div class="row">
-                        <div class="col-sm-6">
+                        <div class="col-sm-4">
                             <div class="form-group ">
                                 <label for="program" class="col-form-label pt-0">Prefered Field</label>
                                 <div class="">
                                     <input class="form-control" type="text" name="program" data-role="tagsinput"
-                                    value="{{ old('program', isset($student->program) ? $student->program : '') }}" placeholder="Enter a Prefered Program">
+                                    value="{{ old('program', isset($student->program) ? $student->program : '') }}" placeholder="Enter a Prefered Program" required>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="col-sm-6">
+                        <div class="col-sm-4">
                             <div class="form-group ">
-                                <label for="program" class="col-form-label pt-0">Prefered Intake</label>
+                                <label for="program" class="col-form-label pt-0">Prefered Intake(Year)</label>
                                 <div class="">
-                                    <input class="form-control" type="date" name="intake" data-role="tagsinput"
-                                    value="{{ old('intake', isset($student->intake) ? $student->intake : '') }}" placeholder="Enter a Intake Date">
+                                    <select data-placeholder="Select Year"
+                                        class="select2 tail-select form-control " id=""
+                                        name="intake_year" required>
+                                        <option value="" selected disabled >Select Intake Year</option>
+                                        <option value="2022" {{ old('intake_year') == '2022' ? 'selected' : '' }} @if(isset($student) && $student->intake_year == "2022" ) selected @endif>2022</option>
+                                        <option value="2023" {{ old('intake_year') == '2023' ? 'selected' : '' }} @if(isset($student) && $student->intake_year == "2023" ) selected @endif>2023</option>
+
+                                    </select>
+                                    @error('intake_year')
+                                        <span class="text-danger">{{ $errors->first('intake_year') }}</span>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-4">
+                            <div class="form-group ">
+                                <label for="program" class="col-form-label pt-0">Prefered Intake(Month)</label>
+                                <div class="">
+                                    <select data-placeholder="Select Intake Month"
+                                        class="select2 tail-select form-control " id=""
+                                        name="intake_month" required>
+                                        <option value="" selected disabled >Select Intake Month</option>
+                                        <option value="february" {{ old('intake_month') == 'february' ? 'selected' : '' }} @if(isset($student) && $student->intake_month == "february" ) selected @endif>February</option>
+                                        <option value="august" {{ old('intake_month') == 'august' ? 'selected' : '' }} @if(isset($student) && $student->intake_month == "august" ) selected @endif>August</option>
+                                        <option value="september" {{ old('intake_month') == 'september' ? 'selected' : '' }} @if(isset($student) && $student->intake_month == "september" ) selected @endif>September</option>
+
+                                    </select>
+                                    @error('intake_month')
+                                        <span class="text-danger">{{ $errors->first('intake_month') }}</span>
+                                    @enderror
                                 </div>
                             </div>
                         </div>
