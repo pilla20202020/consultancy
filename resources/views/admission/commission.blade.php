@@ -188,7 +188,6 @@
                                         class="select2 tail-select form-control " id="mydropdownlist"
                                         name="commissions_claim_status" required>
                                         <option value="" selected disabled >Select Status</option>
-                                        <option value="pending">Pending</option>
                                         <option value="paid" >Paid</option>
                                         <option value="defer" >Defer</option>
 

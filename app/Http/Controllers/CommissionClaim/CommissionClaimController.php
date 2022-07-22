@@ -5,21 +5,28 @@ namespace App\Http\Controllers\CommissionClaim;
 use App\Http\Controllers\Controller;
 use App\Modules\Models\Admission\Admission;
 use App\Modules\Models\ClaimCommission\ClaimCommission;
+use App\Modules\Models\College\College;
 use App\Modules\Models\Commission\Commission;
+use App\Modules\Models\Country\Country;
+use App\Modules\Models\State\State;
 use App\Modules\Models\Student\Student;
 use Illuminate\Http\Request;
 
 class CommissionClaimController extends Controller
 {
 
-    protected $admission, $students, $commission, $claimCommission;
+    protected $admission, $students, $commission, $claimCommission, $country, $state, $college;
 
-    function __construct(Admission $admission, Student $students, Commission $commission, ClaimCommission $claimCommission)
+    function __construct(Admission $admission, Student $students, Commission $commission, ClaimCommission $claimCommission, Country $country, State $state, College $college)
     {
         $this->admission = $admission;
         $this->students = $students;
         $this->commission = $commission;
         $this->claimCommission = $claimCommission;
+        $this->country = $country;
+        $this->state = $state;
+        $this->college = $college;
+
     }
 
     /**
@@ -31,13 +38,44 @@ class CommissionClaimController extends Controller
     {
         //
         $commissions = $this->commission->where('commissions_status','!=','paid')->paginate();
-        return view('claimcommission.index', compact('commissions'));
+        $countries = $this->country->where('status','Active')->get();
+        return view('claimcommission.index', compact('commissions','countries'));
+    }
+
+    public function getCommissionByParameter(Request $request) {
+        $filters = [
+            'country_id'    => $request->country_id,
+            'state_id'    => $request->state_id,
+            'college_id'    => $request->college_id,
+        ];
+        $commissions = $this->commission->where('commissions_status','!=','paid')->paginate();
+        $countries = $this->country->where('status','Active')->get();
+        $states = $this->state->where('status','Active')->get();
+        $colleges = $this->college->where('status','Active')->get();
+        return view('claimcommission.getCommissionByParameter', compact('commissions','countries','filters','states','colleges'));
+
     }
 
     public function claimed()
     {
         $commissions = $this->commission->where('commissions_status','paid')->paginate();
-        return view('claimcommission.claimed', compact('commissions'));
+        $countries = $this->country->where('status','Active')->get();
+        return view('claimcommission.claimed.index', compact('commissions','countries'));
+    }
+
+    public function getClaimedCommissionByParameter(Request $request)
+    {
+        $filters = [
+            'country_id'    => $request->country_id,
+            'state_id'    => $request->state_id,
+            'college_id'    => $request->college_id,
+        ];
+        $commissions = $this->commission->where('commissions_status','paid')->paginate();
+        $countries = $this->country->where('status','Active')->get();
+        $states = $this->state->where('status','Active')->get();
+        $colleges = $this->college->where('status','Active')->get();
+        return view('claimcommission.claimed.getClaimedListByParameter', compact('commissions','countries','filters','states','colleges'));
+
     }
 
     /**

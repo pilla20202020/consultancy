@@ -96,7 +96,7 @@
                         </div>
                         <div class="row justify-content-center">
                             <div class="col-md-12 mt-2">
-                                <label class="control-label">Client Name</label>
+                                <label class="control-label">Receipt To</label>
                                 <input type="text" name="client_name" class="form-control" required>
                             </div>
 
@@ -117,7 +117,6 @@
                                         class="select2 tail-select form-control " id="mydropdownlist"
                                         name="commissions_claim_status" required>
                                         <option value="" selected disabled >Select Status</option>
-                                        <option value="pending">Pending</option>
                                         <option value="paid" >Paid</option>
                                         <option value="defer" >Defer</option>
 

@@ -219,7 +219,7 @@ class AdmissionController extends Controller
                 $p = $p + 1;
             }
             Toastr()->success('Commission Updated Successfully','Success');
-            return redirect()->route('getcommencedadmission.index');
+            return redirect()->route('admission.getcommencedadmission');
         } catch(Exception $e) {
             return null;
         }

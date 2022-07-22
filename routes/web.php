@@ -201,7 +201,9 @@ Route::group(['middleware' => 'auth','namespace' => 'App\Http\Controllers'], fun
 
     Route::group(['as' => 'commission-claim.', 'prefix' => 'commission-claim',], function () {
         Route::get('', 'CommissionClaim\CommissionClaimController@index')->name('index');
+        Route::get('get-commission-by-parameter', 'CommissionClaim\CommissionClaimController@getCommissionByParameter')->name('get_commission_by_parameter');
         Route::get('claimed', 'CommissionClaim\CommissionClaimController@claimed')->name('claimed');
+        Route::get('get-claimed-commission-by-parameter', 'CommissionClaim\CommissionClaimController@getClaimedCommissionByParameter')->name('get_claimed_commission_by_parameter');
         Route::get('create', 'CommissionClaim\CommissionClaimController@create')->name('create');
         Route::post('', 'CommissionClaim\CommissionClaimController@store')->name('store');
         Route::get('{commission-claim}/edit', 'CommissionClaim\CommissionClaimController@edit')->name('edit');
