@@ -1,37 +1,32 @@
 <?php
 
-namespace App\Http\Controllers\Permission;
+namespace App\Http\Controllers\Agent;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Permission\PermissionRequest;
-use App\Modules\Service\Permission\PermissionService;
+use App\Http\Requests\Agent\AgentRequest;
+use App\Modules\Models\Agent\Agent;
 use Illuminate\Http\Request;
 
-class PermissionController extends Controller
+class AgentController extends Controller
 {
-    protected $permission;
+    protected $agent;
 
-    function __construct(PermissionService $permission)
+    function __construct(Agent $agent)
     {
-        $this->permission = $permission;
+        $this->agent = $agent;
     }
-
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
+
+
     public function index()
     {
         //
-        $permission = $this->permission->paginate();
-        return view ('permission.index',compact('permission'));
-    }
-
-    public function getAllData()
-    {
-        // dd($this->permission);
-        return $this->permission->getAllData();
+        $agents = $this->agent->paginate();
+        return view('agent.index', compact('agents'));
     }
 
     /**
@@ -42,7 +37,7 @@ class PermissionController extends Controller
     public function create()
     {
         //
-        return view('permission.create');
+        return view('agent.create');
 
     }
 
@@ -52,13 +47,12 @@ class PermissionController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(PermissionRequest $request)
+    public function store(AgentRequest $request)
     {
         //
-        if($permission = $this->permission->create($request->all())) {
-            return redirect()->route('permission.index');
-        }
-
+        $agent = $this->agent->create($request->data());
+        Toastr()->success('Agent Created Successfully','Success');
+        return redirect()->route('agent.index');
     }
 
     /**
@@ -81,8 +75,8 @@ class PermissionController extends Controller
     public function edit($id)
     {
         //
-        $permission = $this->permission->find($id);
-        return view('permission.edit',compact('permission'));
+        $agent = $this->agent->where('id',$id)->first();
+        return view('agent.edit', compact('agent'));
     }
 
     /**
@@ -92,13 +86,14 @@ class PermissionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(AgentRequest $request, $id)
     {
         //
-        if($this->permission->update($id,$request->all())) {
-            return redirect()->route('permission.index');
+        $agent = $this->agent->where('id',$id);
+        if($agent->update($request->data())) {
+            Toastr()->success('Agent Updated Successfully','Success');
+            return redirect()->route('agent.index');
         }
-
     }
 
     /**
@@ -110,9 +105,9 @@ class PermissionController extends Controller
     public function destroy($id)
     {
         //
-        if($this->permission->delete($id)) {
-            Toastr()->success('Permission Deleted Successfully','Success');
-            return redirect()->route('permission.index');
-        }
+        $agent = $this->agent->where('id',$id);
+        $agent->delete();
+        Toastr()->success('Agent Deleted Successfully','Success');
+        return redirect()->route('agent.index');
     }
 }

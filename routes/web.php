@@ -145,6 +145,23 @@ Route::group(['middleware' => 'auth','namespace' => 'App\Http\Controllers'], fun
         Route::post('districts', 'Common\CommonController@getCollegesByStateId')->name('college.provinceId');
     });
 
+    /*
+    |--------------------------------------------------------------------------
+    | Agent CRUD
+    |--------------------------------------------------------------------------
+    |
+    */
+
+    Route::group(['as' => 'agent.', 'prefix' => 'agent',], function () {
+        Route::get('', 'Agent\AgentController@index')->name('index');
+        Route::get('create', 'Agent\AgentController@create')->name('create');
+        Route::post('', 'Agent\AgentController@store')->name('store');
+        Route::get('{agent}/edit', 'Agent\AgentController@edit')->name('edit');
+        Route::put('{agent}', 'Agent\AgentController@update')->name('update');
+        Route::get('agent/{id}/destroy', 'Agent\AgentController@destroy')->name('destroy');
+
+    });
+
 
     /*
     |--------------------------------------------------------------------------

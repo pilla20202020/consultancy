@@ -155,11 +155,8 @@ class PermissionService extends Service
     {
         try {
 
-            $data['last_deleted_by']= Auth::Permission()->id;
-            $data['deleted_at']= Carbon::now();
             $Permission = $this->Permission->find($PermissionId);
-            $data['is_deleted']='yes';
-            return $Permission = $Permission->update($data);
+            return $Permission = $Permission->delete();
 
         } catch (Exception $e) {
             return false;

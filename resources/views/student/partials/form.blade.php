@@ -4,6 +4,65 @@
           href="{{ asset('resources/css/theme-default/libs/bootstrap-tagsinput/bootstrap-tagsinput.css?1424887862')}}"/>
 @endsection
 @csrf
+
+<h3>Create Account</h3>
+                                            <fieldset class="p-0">
+                                                <div class="form-group ">
+                                                    <label for="example-email-input1" class="col-form-label">Email</label>
+                                                    <div class="">
+                                                        <input class="form-control" type="email" value="" id="example-email-input1" placeholder="@Example.com">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group ">
+                                                    <label for="example-password-input1" class="col-form-label">Password</label>
+                                                    <div class="">
+                                                        <input class="form-control" type="password" id="example-password-input1" placeholder="Password">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group ">
+                                                    <label for="example-password-input01" class="col-form-label">Confirm Password</label>
+                                                    <div class="">
+                                                        <input class="form-control" type="password" id="example-password-input01" placeholder="Confirm Password">
+                                                    </div>
+                                                </div>
+
+                                                <div class="custom-control custom-checkbox my-3">
+                                                    <input type="checkbox" class="custom-control-input" id="customCheck1">
+                                                    <label class="custom-control-label" for="customCheck1">I accept the terms and conditions</label>
+                                                </div>
+                                            </fieldset>
+                                            <h3>Basic Form</h3>
+                                            <fieldset>
+                                                <div class="form-group row">
+                                                    <div class="col-sm-12 col-lg-6">
+                                                        <input class="form-control" type="text" id="name" placeholder="Name">
+                                                    </div>
+                                                    <div class="col-sm-12 col-lg-6">
+                                                        <input class="form-control" type="email" id="example-email-input3" placeholder="Email">
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group row">
+                                                    <div class="col-sm-12">
+                                                        <input class="form-control" type="text" id="subject2" placeholder="Subject">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="4" placeholder="Your message"></textarea>
+                                                </div>
+                                                <div class="custom-control custom-radio my-2">
+                                                    <input type="radio" id="customRadio1" name="customRadio" class="custom-control-input" checked="">
+                                                    <label class="custom-control-label" for="customRadio1">Male</label>
+                                                </div>
+                                                <div class="custom-control custom-radio my-2">
+                                                    <input type="radio" id="customRadio2" name="customRadio" class="custom-control-input">
+                                                    <label class="custom-control-label" for="customRadio2">Female</label>
+                                                </div>
+                                            </fieldset>
+                                            <h3>Confurm Detail</h3>
+                                            <fieldset>
+                                                <p>I agree with the Terms and Conditions.</p>
+                                            </fieldset>
 <div class="row">
     <div class="col-sm-9">
         <div class="card">
@@ -105,6 +164,8 @@
                         </div>
                     </div>
 
+
+
                     <hr>
                     <div class="row mt-2 justify-content-center">
                         <div class="form-group">
@@ -126,12 +187,19 @@
 </div>
 
 
+
+
 @section('page-specific-scripts')
     <script src="{{asset('resources/js/ckeditor/ckeditor.js') }}"></script>
     <script src="{{ asset('js/dropify.min.js') }}"></script>
     <script src="{{ asset('resources/js/libs/bootstrap-tagsinput/bootstrap-tagsinput.min.js')}}"></script>
     <script src="{{ asset('resources/js/libs/jquery-validation/dist/jquery.validate.min.js') }}"></script>
     <script src="{{ asset('resources/js/libs/jquery-validation/dist/additional-methods.min.js') }}"></script>
+    <!-- form wizard -->
+    <script src="{{asset('js/jquery.steps.min.js')}}"></script>
+
+    <!-- form wizard init -->
+    <script src="{{asset('js/form-wizard.init.js')}}"></script>
     <script type="text/javascript">
         $(document).ready(function () {
             $('.dropify').dropify();

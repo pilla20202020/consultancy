@@ -36,6 +36,8 @@
 
         <script src="{{asset('js/form-repeater.init.js')}}"></script>
 
+
+
         {{-- <script>
             $(function () {
                 $('.my-ckeditor').each(function (e) {
@@ -76,6 +78,7 @@
                 })
             }
         </script>
+
 
         @yield('page-specific-scripts')
         {!! Toastr::message() !!}
