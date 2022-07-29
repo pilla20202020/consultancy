@@ -1,8 +1,8 @@
 <tr>
     <td>{{++$key}}</td>
-    <td>{{ Str::limit($student->name, 47) }}</td>
+    <td>{{ Str::limit($student->applicant, 47) }}</td>
     <td>{{ $student->email }}</td>
-    <td>{{ Str::limit($student->phone, 47) }}</td>
+    <td>{{ Str::limit($student->mobile_no, 47) }}</td>
     <td>
         {{ ucfirst($student->intake_month) }}, {{$student->intake_year}}
     </td>

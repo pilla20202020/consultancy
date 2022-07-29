@@ -26,7 +26,7 @@
                         <thead>
                         <tr>
                             <th>S.No.</th>
-                            <th>Name</th>
+                            <th>Applicant Name</th>
                             <th>Email</th>
                             <th>Phone</th>
                             <th>Prefered Intake</th>

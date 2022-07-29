@@ -19,5 +19,11 @@ class CommonController extends Controller
         $colleges= getCollegesByStateId($request->state_id);
         return response()->json(['colleges' =>$colleges],200);
     }
+
+    public function getDistrictsByProvinceId(Request $request)
+    {
+        $districts= getDistrictsByProvinceId($request->state_id);
+        return response()->json(['districts' =>$districts],200);
+    }
 }
 

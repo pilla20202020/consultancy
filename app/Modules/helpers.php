@@ -115,6 +115,20 @@ function getCollegesByStateId($state_id)
 }
 /**
  * ---------------------------------------------
+ * |            District                        |
+ * ----------------------------------------------
+ */
+function getDistricts()
+{
+    return District::getDistricts();
+}
+
+function getDistrictsByProvinceId($state_id)
+{
+    return District::getDistrictsByProvinceId($state_id);
+}
+/**
+ * ---------------------------------------------
  * |            Commenced                        |
  * ----------------------------------------------
  */
@@ -140,7 +154,7 @@ function uploadCommonFile($file, $path,$existingPath=null)
         // generate a new filename. getClientOriginalExtension() for the file extension
         $filename = $path . time() . '.' . $file->getClientOriginalExtension();
         // save to storage/app/photos as the new $filename
-        $path = $file->storeAs('candidates', $filename,'public');
+        $path = $file->storeAs('student', $filename,'public');
         return $path;
     }
 }

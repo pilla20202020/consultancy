@@ -81,6 +81,7 @@
 
 
         @yield('page-specific-scripts')
+        @yield('scripts')
         {!! Toastr::message() !!}
 
 

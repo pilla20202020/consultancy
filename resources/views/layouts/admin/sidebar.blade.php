@@ -34,6 +34,7 @@
                     <ul class="sub-menu mm-collapse" aria-expanded="true">
                         <li><a href="{{ route('countries.index')}}" aria-expanded="false"><i class="fas fa-hand-point-right"></i>Countries</a></li>
                         <li><a href="{{ route('states.index')}}" aria-expanded="false"><i class="fas fa-hand-point-right"></i>States</a></li>
+                        <li><a href="{{ route('districts.index')}}" aria-expanded="false"><i class="fas fa-hand-point-right"></i>Districts</a></li>
                         <li><a href="{{ route('colleges.index')}}" aria-expanded="false"><i class="fas fa-hand-point-right"></i>Colleges</a></li>
                         <li><a href="{{ route('agent.index')}}" aria-expanded="false"><i class="fas fa-hand-point-right"></i>Agent</a></li>
                     </ul>

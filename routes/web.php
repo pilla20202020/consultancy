@@ -121,6 +121,24 @@ Route::group(['middleware' => 'auth','namespace' => 'App\Http\Controllers'], fun
         Route::get('change-status','State\StateController@changeStatus')->name('change_status');
     });
 
+        /*
+    |--------------------------------------------------------------------------
+    | Provice State CRUD
+    |--------------------------------------------------------------------------
+    |
+    */
+
+    Route::group(['as' => 'districts.', 'prefix' => 'district',], function () {
+        Route::get('', 'District\DistrictController@index')->name('index');
+        Route::get('country-data', 'District\DistrictController@getAllData')->name('data');
+        Route::get('get-states', 'District\DistrictController@getState')->name('get_states');
+        Route::get('create', 'District\DistrictController@create')->name('create');
+        Route::post('', 'District\DistrictController@store')->name('store');
+        Route::get('{district}/edit', 'District\DistrictController@edit')->name('edit');
+        Route::put('{district}', 'District\DistrictController@update')->name('update');
+        Route::get('change-status','District\DistrictController@changeStatus')->name('change_status');
+    });
+
 
     /*
     |--------------------------------------------------------------------------
@@ -141,9 +159,12 @@ Route::group(['middleware' => 'auth','namespace' => 'App\Http\Controllers'], fun
     });
 
     Route::group(['as'=>'common.', 'prefix'=>'common'], function(){
-        Route::post('provinces', 'Common\CommonController@getStatesByCountryId')->name('state.countryId');
-        Route::post('districts', 'Common\CommonController@getCollegesByStateId')->name('college.provinceId');
+        Route::post('states', 'Common\CommonController@getStatesByCountryId')->name('state.countryId');
+        Route::post('colleges', 'Common\CommonController@getCollegesByStateId')->name('college.provinceId');
+        Route::post('provinces', 'Common\CommonController@getProvincesByCountryId')->name('province.countryId');
+        Route::post('districts', 'Common\CommonController@getDistrictsByProvinceId')->name('district.provinceId');
     });
+
 
     /*
     |--------------------------------------------------------------------------

@@ -16,9 +16,9 @@ $('#country_id').on('change', function(e) {
             $('#province_id').html('');
             $('#district_id').html('');
             body = '<option value="" selected disabled>Select Province</option>';
-            if (response.provinces) {
-                $.each(response.provinces, function(key, province) {
-                    body += "<option value='" + province['id'] + "'>" + province['province_name'] + "</option>";
+            if (response.states) {
+                $.each(response.states, function(key, state) {
+                    body += "<option value='" + state['id'] + "'>" + state['state_name'] + "</option>";
                 });
                 $('#province_id').html(body);
             }
@@ -29,19 +29,20 @@ $('#country_id').on('change', function(e) {
 
 $('#province_id').on('change', function(e) {
     e.preventDefault();
-    var province_id = $(this).val();
+    var state_id = $(this).val();
     var body = "";
     $.ajax({
         type: 'POST',
         url: districtByProvinceId,
         data: {
             _token: $("meta[name='csrf-token']").attr('content'),
-            province_id: province_id,
+            state_id: state_id,
         },
         success: function(response) {
             $('#district_id').html('');
             body = '<option value="" selected disabled>Select District</option>';
             if (response.districts) {
+                console.log(response.districts);
                 $.each(response.districts, function(key, district) {
                     body += "<option value='" + district['id'] + "'>" + district['district_name'] + "</option>";
                 });

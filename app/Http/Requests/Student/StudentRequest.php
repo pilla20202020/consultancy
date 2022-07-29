@@ -24,14 +24,14 @@ class StudentRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required',
+            'applicant' => 'required',
         ];
     }
 
     public function data()
     {
         $data = [
-            'name' => $this->get('name'),
+            'applicant' => $this->get('applicant'),
             'email'  => $this->get('email'),
             'phone'  => $this->get('phone'),
             'program'  => $this->get('program'),
