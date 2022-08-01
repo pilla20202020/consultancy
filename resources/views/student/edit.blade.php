@@ -11,7 +11,7 @@
     <section>
         <div class="section-body">
             <form class="form form-validate floating-label" action="{{route('student.update',$student->students_id)}}"
-                  method="POST" enctype="multipart/form-data" novalidate>
+                  method="POST" enctype="multipart/form-data">
             @method('PUT')
             @include('student.partials.form', ['header' => 'Edit student <span class="text-primary">('.($student->applicant).')</span>'])
             </form>
@@ -71,7 +71,7 @@
             <div class="col-sm-3">
                 <input type="hidden" class="form-control" name="candidate_id">
                 <label class="control-label">Level</label>
-                <select name="level[]" class="form-control">
+                <select name="level[]" class="form-control" required>
                     <option value="#" disabled selected>Select Education</option>
                     <option value="slc">SLC/SEE</option>
                     <option value="highschool">10+2 / A-Levels</option>
@@ -85,18 +85,18 @@
             <div class="col-sm-3">
                 <label class="control-label">Institute / University</label>
                 <input type="text" name="university[]"
-                    class="form-control">
+                    class="form-control" required>
             </div>
 
             <div class="col-sm-2">
                 <label class="control-label">Percentage</label>
                 <input type="number" name="percentage[]"
-                    class="form-control" min="0" max="100">
+                    class="form-control" min="0" max="100" required>
             </div>
 
             <div class="col-sm-3">
                 <label class="control-label">Certification Upload</label>
-                <input type="file" name="documents[]" class="form-control">
+                <input type="file" name="documents[]" class="form-control" required>
             </div>
 
             <div class="col-md-1" style="margin-top: 45px;">
@@ -134,12 +134,12 @@
             <div class="col-sm-3">
                 <input type="hidden" class="form-control" name="candidate_id">
                 <label class="control-label">Language</label>
-                <select name="language[]" class="form-control">
+                <select name="language[]" class="form-control" required>
                     <option value="#" disabled selected>Select Language</option>
-                    <option value="ielts">SLC/SEE</option>
-                    <option value="sat">10+2 / A-Levels</option>
-                    <option value="pte">Bachelors</option>
-                    <option value="gre">Diploma</option>
+                    <option value="ielts">Itelts</option>
+                    <option value="sat">SAT</option>
+                    <option value="pte">PTE</option>
+                    <option value="gre">GRE</option>
                     <option value="other">Other</option>
                 </select>
             </div>
@@ -147,12 +147,12 @@
             <div class="col-sm-2">
                 <label class="control-label">Score</label>
                 <input type="number" name="score[]"
-                    class="form-control" min="0" max="100">
+                    class="form-control" min="0" max="100" required>
             </div>
 
             <div class="col-sm-3">
                 <label class="control-label">Certification Upload</label>
-                <input type="file" name="language_documents[]" class="form-control" >
+                <input type="file" name="language_documents[]" class="form-control" required>
             </div>
 
             <div class="col-md-1" style="margin-top: 45px;">

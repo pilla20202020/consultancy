@@ -144,6 +144,7 @@
             </div>
         </div>
     </div>
+
     <hr>
     <div class="row">
         <div class="col-sm-4">
@@ -248,5 +249,103 @@
             </div>
         </div>
     </div>
+
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="form-group ">
+                <label for="program" class="col-form-label pt-0">Prefered Intake(Year)</label>
+                <div class="">
+                    <select data-placeholder="Select Year"
+                        class="select2 tail-select form-control " id=""
+                        name="intake_year" required>
+                        <option value="" selected disabled >Select Intake Year</option>
+                        <option value="2022" {{ old('intake_year') == '2022' ? 'selected' : '' }} @if(isset($student) && $student->intake_year == "2022" ) selected @endif>2022</option>
+                        <option value="2023" {{ old('intake_year') == '2023' ? 'selected' : '' }} @if(isset($student) && $student->intake_year == "2023" ) selected @endif>2023</option>
+
+                    </select>
+                    @error('intake_year')
+                        <span class="text-danger">{{ $errors->first('intake_year') }}</span>
+                    @enderror
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-4">
+            <div class="form-group ">
+                <label for="program" class="col-form-label pt-0">Prefered Intake(Month)</label>
+                <div class="">
+                    <select data-placeholder="Select Intake Month"
+                        class="select2 tail-select form-control " id=""
+                        name="intake_month" required>
+                        <option value="" selected disabled >Select Intake Month</option>
+                        <option value="february" {{ old('intake_month') == 'february' ? 'selected' : '' }} @if(isset($student) && $student->intake_month == "february" ) selected @endif>February</option>
+                        <option value="august" {{ old('intake_month') == 'august' ? 'selected' : '' }} @if(isset($student) && $student->intake_month == "august" ) selected @endif>August</option>
+                        <option value="september" {{ old('intake_month') == 'september' ? 'selected' : '' }} @if(isset($student) && $student->intake_month == "september" ) selected @endif>September</option>
+
+                    </select>
+                    @error('intake_month')
+                        <span class="text-danger">{{ $errors->first('intake_month') }}</span>
+                    @enderror
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label for="marital_status" class="col-form-label pt-0">Source Refrence</label>
+                <div class="">
+                    <select data-placeholder="Select Source Refrence"
+                        class="tail-select form-control" name="source_ref" id="source_ref">
+                        <option value="#" disabled selected>Source Refrence</option>
+                        <option value="direct"  @if (isset($student) && $student->source_ref == 'direct') selected @endif>Direct</option>
+                        <option value="agent"  @if (isset($student) && $student->source_ref == 'agent') selected @endif>Agent</option>
+                        <option value="branch"  @if (isset($student) && $student->source_ref == 'branch') selected @endif>Branch</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row agent"  @if (isset($student) && $student->source_ref == 'agent') style="display: block;" @else style="display: none;" @endif >
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="ref_id" class="col-form-label pt-0">Agent's Name</label>
+                <div class="">
+                    <select data-placeholder="Select Agent"
+                        class="form-control agent_id" id="agent_id"
+                        name="ref_id" width="100%">
+                        <option value="" disabled selected>Select Agent</option>
+                        @foreach ($agents as $agent)
+                            <option value="{{ $agent->id }}" @if (isset($student) && $student->ref_id == $agent->id) selected @endif>
+                                {{ ucfirst($agent->name) }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row branch"  @if (isset($student) && $student->source_ref == 'branch') style="display: block;" @else style="display: none;" @endif >
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="ref_id" class="col-form-label pt-0">Select Branch</label>
+                <div class="">
+                    <select data-placeholder="Select Branch"
+                        class="form-control agent_id" id="agent_id"
+                        name="ref_id" width="100%">
+                        <option value="" disabled selected>Select Branch</option>
+                        @foreach ($branches as $branch)
+                            <option value="{{ $branch->id }}" @if (isset($branch) && $student->ref_id == $branch->id) selected @endif>
+                                {{ ucfirst($branch->name) }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
 </div>
 

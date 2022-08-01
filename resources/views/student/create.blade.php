@@ -22,6 +22,7 @@
             $('#country_id').select2();
             $('#province_id').select2();
             $('#district_id').select2();
+            $('#agent_id').select2();
 
             $('#marital_status').on('change', function() {
                 var status = $(this).val();
@@ -29,6 +30,21 @@
                     $('.spouse-name').show();
                 } else {
                     $('.spouse-name').hide();
+                }
+            });
+
+            $('#source_ref').on('change', function() {
+                var value = $(this).val();
+                if (value == 'agent') {
+                    $('.agent').show();
+                    $('.branch').hide();
+
+                } else if(value == 'branch') {
+                    $('.branch').show();
+                    $('.agent').hide();
+                } else {
+                    $('.agent').hide();
+                    $('.branch').hide();
                 }
             });
 

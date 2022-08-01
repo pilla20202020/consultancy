@@ -29,6 +29,8 @@ class CreateStudentsTable extends Migration
             $table->decimal('alternate_mobile_no',10,0)->nullable();
             $table->string('email',255)->nullable();
             $table->date('dob')->nullable();
+            $table->enum('source_ref',['direct','branch','agent'])->default('direct')->nullable();
+            $table->string('ref_id',255)->nullable();
             $table->bigInteger('country_id')->unsigned()->index()->nullable();
             $table->bigInteger('state_id')->unsigned()->index()->nullable();
             $table->bigInteger('district_id')->unsigned()->index()->nullable();

@@ -30,9 +30,13 @@ class Student extends Model
         'dob',
         'country_id',
         'state_id',
+        'source_ref',
+        'ref_id',
         'district_id',
         'municipality_name',
         'ward_no',
+        'intake_year',
+        'intake_month',
         'village_name',
         'full_address',
         'status',
@@ -54,5 +58,9 @@ class Student extends Model
         return $this->hasMany(StudentLanguage::class,'student_id','students_id');
     }
 
+    public function fields()
+    {
+        return $this->hasMany(StudentField::class,'student_id','students_id');
+    }
 
 }

@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Student;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Student\StudentRequest;
+use App\Modules\Models\Agent\Agent;
+use App\Modules\Models\Branch\Branch;
 use App\Modules\Models\Country\Country;
 use App\Modules\Models\Student\Student;
 use App\Modules\Models\Student\StudentEducation;
@@ -20,12 +22,14 @@ class StudentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    protected $students, $country;
+    protected $students, $country, $agent, $branch;
 
-    function __construct(Student $students,Country $country)
+    function __construct(Student $students,Country $country, Agent $agent, Branch $branch)
     {
         $this->students = $students;
         $this->country = $country;
+        $this->agent = $agent;
+        $this->branch = $branch;
     }
 
     public function index()
@@ -44,7 +48,9 @@ class StudentController extends Controller
     {
         //
         $countries = $this->country->where('status','Active')->get();
-        return view('student.create',compact('countries'));
+        $agents = $this->agent->get();
+        $branches = $this->branch->get();
+        return view('student.create',compact('countries','agents','branches'));
     }
 
     /**
@@ -74,13 +80,18 @@ class StudentController extends Controller
                     'alternate_mobile_no' => $data['alternate_mobile_no'],
                     'email' => $data['email'],
                     'country_id' => $data['country_id'] ?? null,
-                    'province_id' => $data['province_id'] ?? null,
+                    'state_id' => $data['state_id'] ?? null,
                     'district_id' => $data['district_id'] ?? null,
                     'municipality_name' => $data['municipality_name'],
                     'ward_no' => $data['ward_no'],
                     'village_name' => $data['village_name'],
                     'full_address' => $data['full_address'],
+                    'intake_month' => $data['intake_month'],
+                    'intake_year' => $data['intake_year'],
+                    'source_ref' => $data['source_ref'] ?? null,
+                    'ref_id' => $data['source_ref'] == 'agent' || 'branch' ? $data['ref_id']:null,
                     'created_by' => Auth::user()->id,
+
                 ];
                 $student = $this->students->create($studentData);
 
@@ -171,12 +182,14 @@ class StudentController extends Controller
     {
         //
         $student = $this->students->where('students_id',$student)->first();
+        $agents = $this->agent->get();
         $countries = $this->country->where('status','Active')->get();
         $states = getStatesByCountryId($student->country_id);
         $districts = getDistrictsByProvinceId($student->state_id);
         $issue_districts = getDistricts();
+        $branches = $this->branch->get();
         $fields = StudentField::where('student_id',$student->students_id)->pluck('name')->toArray();
-        return view('student.edit', compact('student','countries','fields','states','districts','issue_districts'));
+        return view('student.edit', compact('student','countries','branches','agents','fields','states','districts','issue_districts'));
 
     }
 
@@ -187,13 +200,149 @@ class StudentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(StudentRequest $request, $student)
+    public function update(Request $request, $studentId)
     {
         //
-        $student = $this->students->where('students_id',$student);
-        if($student->update($request->data())) {
-            Toastr()->success('Student Updated Successfully','Success');
-            return redirect()->route('student.index')->withSuccess(trans('Student has been updated'));
+        try {
+            $data = $request->all();
+            $student = DB::transaction(function () use ($data, $studentId) {
+                $student = $this->students->where('students_id',$studentId);
+
+                $studentData = [
+                    'applicant' => $data['applicant'],
+                    'first_name' => $data['first_name'],
+                    'middle_name' => $data['middle_name'],
+                    'last_name' => $data['last_name'],
+                    'gender' => $data['gender'],
+                    'dob' => $data['dob'],
+                    'material_status' => $data['material_status'] ?? null,
+                    'father_name' => $data['father_name'],
+                    'mother_name' => $data['mother_name'],
+                    'spouse_name' => $data['material_status'] == 'Yes' ? $data['spouse_name']:null,
+                    'mobile_no' => $data['mobile_no'],
+                    'alternate_mobile_no' => $data['alternate_mobile_no'],
+                    'email' => $data['email'],
+                    'country_id' => $data['country_id'] ?? null,
+                    'state_id' => $data['state_id'] ?? null,
+                    'district_id' => $data['district_id'] ?? null,
+                    'municipality_name' => $data['municipality_name'],
+                    'ward_no' => $data['ward_no'],
+                    'village_name' => $data['village_name'],
+                    'full_address' => $data['full_address'],
+                    'intake_month' => $data['intake_month'],
+                    'intake_year' => $data['intake_year'],
+                    'source_ref' => $data['source_ref'] ?? null,
+                    'ref_id' => $data['source_ref'] == 'agent' || 'branch' ? $data['ref_id']:null,
+                    'created_by' => Auth::user()->id,
+                ];
+                $student->update($studentData);
+                $student = $student->first();
+                // $levels = StudentEducation::where('student_id', $student->students_id)->get();
+                // foreach ($levels as $level) {
+                //     // $imageFile = public_path().'/storage/'.$level->documents;
+                //     // unlink($imageFile);
+                //     $level->delete();
+                // }
+                $documentsPath = [];
+                if (!empty($data['documents'])) {
+                    foreach ($data['documents'] as $key => $value) {
+                        if(!empty($data['qualification_id'][$key])){
+                            $existingQuli = StudentEducation::find($data['qualification_id'][$key]);
+                            if($existingQuli){
+                                $documentsPath[$key] = uploadCommonFile($value, 'qualification/',$existingQuli->documents);
+                            }
+
+                        }else{
+                            $documentsPath[$key] = uploadCommonFile($value, 'qualification/');
+                        }
+
+                    }
+                }
+                if (!empty($data['level'])) {
+                    foreach ($data['level'] as $key => $value) {
+                        $quali = [
+                            'student_id' => $student->students_id,
+                            'level' => $data['level'][$key],
+                            'university' => $data['university'][$key],
+                            'percentage' => $data['percentage'][$key],
+
+                        ];
+                        if(isset($documentsPath[$key])){
+                            $quali['documents'] = $documentsPath[$key];
+                        }
+                        if(!empty($data['qualification_id'][$key])){
+                            $existingQuli = StudentEducation::find($data['qualification_id'][$key]);
+                            if($existingQuli){
+                                $existingQuli->update($quali);
+                            }
+                        }else{
+                            StudentEducation::create($quali);
+                        }
+                    }
+                }
+                // Student Education
+
+                // Student Language
+                $languageDocumentsPath = [];
+                if (!empty($data['language_documents'])) {
+                    foreach ($data['language_documents'] as $key => $value) {
+                        if(!empty($data['language_id'][$key])){
+                            $existingLang = StudentLanguage::find($data['language_id'][$key]);
+                            if($existingQuli){
+                                $languageDocumentsPath[$key] = uploadCommonFile($value, 'language/',$existingLang->documents);
+                            }
+
+                        }else{
+                            $languageDocumentsPath[$key] = uploadCommonFile($value, 'language/');
+                        }
+
+                    }
+                }
+                if (!empty($data['language'])) {
+                    foreach ($data['language'] as  $key => $value) {
+                        $lang = [
+                            'student_id' => $student->students_id,
+                            'language' => $data['language'][$key],
+                            'score' => $data['score'][$key],
+                        ];
+                        if(isset($languageDocumentsPath[$key])){
+                            $lang['language_documents'] = $languageDocumentsPath[$key];
+                        }
+
+                        if(!empty($data['language_id'][$key])){
+                            $existingLang = StudentLanguage::find($data['language_id'][$key]);
+                            if($existingLang){
+                                $existingLang->update($lang);
+                            }
+                        }else{
+                            StudentLanguage::create($lang);
+                        }
+                        // dd($quali);
+                    }
+                }
+                $studentField = StudentField::where('student_id',$student->students_id)->get();
+                foreach ($studentField as $field) {
+                    $field->delete();
+                }
+
+                if (!empty($data['preferred_field'])) {
+                    foreach ($data['preferred_field'] as  $key => $value) {
+                        $field = [
+                            'student_id' => $student->students_id,
+                            'name' => $data['preferred_field'][$key],
+                        ];
+                        // dd($quali);
+                        StudentField::create($field);
+                    }
+                }
+                // Student Language
+
+            });
+            Toastr()->success('Student Created Successfully','Success');
+            return redirect()->route('student.index');
+
+        } catch (Exception $e) {
+            return null;
         }
     }
 

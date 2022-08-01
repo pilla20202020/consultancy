@@ -183,6 +183,23 @@ Route::group(['middleware' => 'auth','namespace' => 'App\Http\Controllers'], fun
 
     });
 
+    /*
+    |--------------------------------------------------------------------------
+    | Branch CRUD
+    |--------------------------------------------------------------------------
+    |
+    */
+
+    Route::group(['as' => 'branch.', 'prefix' => 'branch',], function () {
+        Route::get('', 'Branch\BranchController@index')->name('index');
+        Route::get('create', 'Branch\BranchController@create')->name('create');
+        Route::post('', 'Branch\BranchController@store')->name('store');
+        Route::get('{branch}/edit', 'Branch\BranchController@edit')->name('edit');
+        Route::put('{branch}', 'Branch\BranchController@update')->name('update');
+        Route::get('branch/{id}/destroy', 'Branch\BranchController@destroy')->name('destroy');
+
+    });
+
 
     /*
     |--------------------------------------------------------------------------
