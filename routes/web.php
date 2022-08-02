@@ -244,6 +244,7 @@ Route::group(['middleware' => 'auth','namespace' => 'App\Http\Controllers'], fun
         Route::get('getcommissiondetail', 'Admission\AdmissionController@getCommissionDetail')->name('getcommissiondetail');
         Route::post('addcommissionclaim', 'Admission\AdmissionController@addCommissionClaim')->name('addcommissionclaim');
         Route::post('addfollowup', 'Admission\AdmissionController@addFollowUp')->name('addfollowup');
+        Route::get('invoice/{id}', 'Admission\AdmissionController@generateInvoice')->name('generateinvoice');
 
     });
 

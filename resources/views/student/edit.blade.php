@@ -10,7 +10,7 @@
 @section('content')
     <section>
         <div class="section-body">
-            <form class="form form-validate floating-label" action="{{route('student.update',$student->students_id)}}"
+            <form class="form form-validate floating-label" action="{{route('student.update',$student->id)}}"
                   method="POST" enctype="multipart/form-data">
             @method('PUT')
             @include('student.partials.form', ['header' => 'Edit student <span class="text-primary">('.($student->applicant).')</span>'])
@@ -45,6 +45,21 @@
                     $('.spouse-name').show();
                 } else {
                     $('.spouse-name').hide();
+                }
+            });
+
+            $('#source_ref').on('change', function() {
+                var value = $(this).val();
+                if (value == 'agent') {
+                    $('.agent').show();
+                    $('.branch').hide();
+
+                } else if(value == 'branch') {
+                    $('.branch').show();
+                    $('.agent').hide();
+                } else {
+                    $('.agent').hide();
+                    $('.branch').hide();
                 }
             });
 

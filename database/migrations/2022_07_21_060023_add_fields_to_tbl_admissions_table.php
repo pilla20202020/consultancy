@@ -15,7 +15,7 @@ class AddFieldsToTblAdmissionsTable extends Migration
     {
         Schema::table('tbl_admissions', function (Blueprint $table) {
             //
-            $table->bigInteger('country_id')->unsigned()->index()->nullable()->after('admissions_id');
+            $table->bigInteger('country_id')->unsigned()->index()->nullable()->after('id');
             $table->foreign('country_id')->references('id')->on('countries')->onUpdate('cascade')->onDelete('cascade');
             $table->bigInteger('state_id')->unsigned()->index()->nullable();
             $table->foreign('state_id')->references('id')->on('states')->onUpdate('cascade')->onDelete('cascade');

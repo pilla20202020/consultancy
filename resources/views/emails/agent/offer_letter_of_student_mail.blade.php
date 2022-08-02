@@ -376,17 +376,8 @@
                     <!-- START MAIN CONTENT AREA -->
                     <tr>
                         <td class="wrapper">
-                            <h2>Dear {{ $candidate['first_name'] }} {{$candidate['last_name']}}, You are approved for further process to your documents to Company.</h2>
-                            <table role="presentation" border="0" cellpadding="0" cellspacing="0">
-                                <tbody>
-
-                                <tr>
-                                    <td>
-                                        <a href="#" class="btn btn-primary">View Request</a>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
+                            <h2>Dear {{ $agent_branch['name'] }},</h2><br>
+                            <h2> Applicant name {{ $student['applicant']}} has successfully admitted for {{ $college['name'] }}. The Applicant Intake is for {{$admission['intake_month']}},{{$admission['intake_year']}}</h2>
                         </td>
                     </tr>
                     <!-- END MAIN CONTENT AREA -->

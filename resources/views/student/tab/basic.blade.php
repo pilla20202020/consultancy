@@ -336,7 +336,7 @@
                         name="ref_id" width="100%">
                         <option value="" disabled selected>Select Branch</option>
                         @foreach ($branches as $branch)
-                            <option value="{{ $branch->id }}" @if (isset($branch) && $student->ref_id == $branch->id) selected @endif>
+                            <option value="{{ $branch->id }}" @if (isset($student) && $student->ref_id == $branch->id) selected @endif>
                                 {{ ucfirst($branch->name) }}</option>
                         @endforeach
                     </select>

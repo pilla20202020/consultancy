@@ -10,7 +10,7 @@
 @section('content')
     <section>
         <div class="section-body">
-            <form class="form form-validate floating-label" action="{{route('admission.update',$admission->admissions_id)}}"
+            <form class="form form-validate floating-label" action="{{route('admission.update',$admission->id)}}"
                   method="POST" enctype="multipart/form-data" novalidate>
             @method('PUT')
             @include('admission.partials.form', ['header' => 'Edit Admission <span class="text-primary">('.($admission->name).')</span>'])

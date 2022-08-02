@@ -89,7 +89,7 @@ class StudentController extends Controller
                     'intake_month' => $data['intake_month'],
                     'intake_year' => $data['intake_year'],
                     'source_ref' => $data['source_ref'] ?? null,
-                    'ref_id' => $data['source_ref'] == 'agent' || 'branch' ? $data['ref_id']:null,
+                    'ref_id' => $data['source_ref'] == 'agent || branch' ? $data['ref_id']:null,
                     'created_by' => Auth::user()->id,
 
                 ];
@@ -181,14 +181,14 @@ class StudentController extends Controller
     public function edit($student)
     {
         //
-        $student = $this->students->where('students_id',$student)->first();
+        $student = $this->students->where('id',$student)->first();
         $agents = $this->agent->get();
         $countries = $this->country->where('status','Active')->get();
         $states = getStatesByCountryId($student->country_id);
         $districts = getDistrictsByProvinceId($student->state_id);
         $issue_districts = getDistricts();
         $branches = $this->branch->get();
-        $fields = StudentField::where('student_id',$student->students_id)->pluck('name')->toArray();
+        $fields = StudentField::where('student_id',$student->id)->pluck('name')->toArray();
         return view('student.edit', compact('student','countries','branches','agents','fields','states','districts','issue_districts'));
 
     }
@@ -206,7 +206,7 @@ class StudentController extends Controller
         try {
             $data = $request->all();
             $student = DB::transaction(function () use ($data, $studentId) {
-                $student = $this->students->where('students_id',$studentId);
+                $student = $this->students->where('id',$studentId);
 
                 $studentData = [
                     'applicant' => $data['applicant'],
@@ -232,12 +232,12 @@ class StudentController extends Controller
                     'intake_month' => $data['intake_month'],
                     'intake_year' => $data['intake_year'],
                     'source_ref' => $data['source_ref'] ?? null,
-                    'ref_id' => $data['source_ref'] == 'agent' || 'branch' ? $data['ref_id']:null,
+                    'ref_id' => $data['source_ref'] == 'agent || branch' ? $data['ref_id']:null,
                     'created_by' => Auth::user()->id,
                 ];
                 $student->update($studentData);
                 $student = $student->first();
-                // $levels = StudentEducation::where('student_id', $student->students_id)->get();
+                // $levels = StudentEducation::where('student_id', $student->id)->get();
                 // foreach ($levels as $level) {
                 //     // $imageFile = public_path().'/storage/'.$level->documents;
                 //     // unlink($imageFile);
@@ -261,7 +261,7 @@ class StudentController extends Controller
                 if (!empty($data['level'])) {
                     foreach ($data['level'] as $key => $value) {
                         $quali = [
-                            'student_id' => $student->students_id,
+                            'student_id' => $student->id,
                             'level' => $data['level'][$key],
                             'university' => $data['university'][$key],
                             'percentage' => $data['percentage'][$key],
@@ -301,7 +301,7 @@ class StudentController extends Controller
                 if (!empty($data['language'])) {
                     foreach ($data['language'] as  $key => $value) {
                         $lang = [
-                            'student_id' => $student->students_id,
+                            'student_id' => $student->id,
                             'language' => $data['language'][$key],
                             'score' => $data['score'][$key],
                         ];
@@ -320,7 +320,7 @@ class StudentController extends Controller
                         // dd($quali);
                     }
                 }
-                $studentField = StudentField::where('student_id',$student->students_id)->get();
+                $studentField = StudentField::where('student_id',$student->id)->get();
                 foreach ($studentField as $field) {
                     $field->delete();
                 }
@@ -328,7 +328,7 @@ class StudentController extends Controller
                 if (!empty($data['preferred_field'])) {
                     foreach ($data['preferred_field'] as  $key => $value) {
                         $field = [
-                            'student_id' => $student->students_id,
+                            'student_id' => $student->id,
                             'name' => $data['preferred_field'][$key],
                         ];
                         // dd($quali);
@@ -355,7 +355,7 @@ class StudentController extends Controller
     public function destroy($student)
     {
         //
-        $student = $this->students->where('students_id',$student);
+        $student = $this->students->where('id',$student);
         $student->delete();
         return redirect()->route('student.index')->withSuccess(trans('Student has been deleted'));
     }

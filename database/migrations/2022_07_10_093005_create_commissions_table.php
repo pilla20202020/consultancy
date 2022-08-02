@@ -17,9 +17,9 @@ class CreateCommissionsTable extends Migration
             $table->id('commissions_id');
             $table->string('title');
             $table->bigInteger('admission_id')->unsigned()->index()->nullable();
-            $table->foreign('admission_id')->references('admissions_id')->on('tbl_admissions')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('admission_id')->references('id')->on('tbl_admissions')->onUpdate('cascade')->onDelete('cascade');
             $table->bigInteger('student_id')->unsigned()->index()->nullable();
-            $table->foreign('student_id')->references('students_id')->on('tbl_students')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('student_id')->references('id')->on('tbl_students')->onUpdate('cascade')->onDelete('cascade');
             $table->date('claim_date');
             $table->string('fees');
             $table->enum('commissions_status',['pending','paid'])->nullable();

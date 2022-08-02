@@ -16,7 +16,7 @@ class CreateStudentFieldsTable extends Migration
         Schema::create('student_fields', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('student_id')->unsigned()->index()->nullable();
-            $table->foreign('student_id')->references('students_id')->on('tbl_students')->onDelete('cascade');
+            $table->foreign('student_id')->references('id')->on('tbl_students')->onDelete('cascade');
             $table->string('name')->nullable();
             $table->timestamps();
         });

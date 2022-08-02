@@ -29,7 +29,7 @@ class Admission extends Model
     ];
 
     public function student(){
-        return $this->belongsTo(Student::class,'student_id','students_id');
+        return $this->belongsTo(Student::class,'student_id','id');
     }
 
     public function country()
@@ -49,12 +49,12 @@ class Admission extends Model
 
     public function commissions()
     {
-        return $this->hasMany(Commission::class,'admission_id','admissions_id')->orderBy('commissions_id');
+        return $this->hasMany(Commission::class,'admission_id','id')->orderBy('commissions_id');
     }
 
     public function claimCommission()
     {
-        return $this->hasMany(Commission::class,'admission_id','admissions_id')->orderBy('claim_date')->where('commissions_status','pending');
+        return $this->hasMany(Commission::class,'admission_id','id')->orderBy('claim_date')->where('commissions_status','pending');
     }
 
 

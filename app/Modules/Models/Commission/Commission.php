@@ -24,11 +24,11 @@ class Commission extends Model
     ];
 
     public function student(){
-        return $this->belongsTo(Student::class,'student_id','students_id');
+        return $this->belongsTo(Student::class,'student_id','id');
     }
 
     public function admission(){
-        return $this->belongsTo(Admission::class,'admission_id','admissions_id');
+        return $this->belongsTo(Admission::class,'admission_id','id');
     }
 
     public function claimCommission(){

@@ -30,7 +30,6 @@
                             <th>Country/State</th>
                             <th>College</th>
                             <th>Intake</th>
-                            <th>Program</th>
                             <th>Fee</th>
                             <th>Actions</th>
                         </tr>

@@ -14,7 +14,7 @@ class CreateStudentsTable extends Migration
     public function up()
     {
         Schema::create('tbl_students', function (Blueprint $table) {
-            $table->id('students_id');
+            $table->id('id');
             // $table->unsignedBigInteger('user_id');
             $table->string('applicant',255)->nullable();
             $table->string('first_name',255)->nullable();

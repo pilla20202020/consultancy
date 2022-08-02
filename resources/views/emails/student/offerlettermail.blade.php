@@ -376,18 +376,8 @@
                     <!-- START MAIN CONTENT AREA -->
                     <tr>
                         <td class="wrapper">
-                            <h2>Happy Birthday!!!!</h2>
-                            <h2>Dear {{ $user->first_name }} {{$user->first_name}}, Wishing You Many Many Happy Birthday.</h2>
-                            <table role="presentation" border="0" cellpadding="0" cellspacing="0">
-                                <tbody>
+                            <h2>Dear {{ $student['applicant'] }}, Your admission for {{ $college['name'] }} to has been approved. Your Intake is for {{$admission['intake_month']}},{{$admission['intake_year']}}</h2>
 
-                                <tr>
-                                    <td>
-                                        <a href="#" class="btn btn-primary">View Request</a>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
                         </td>
                     </tr>
                     <!-- END MAIN CONTENT AREA -->

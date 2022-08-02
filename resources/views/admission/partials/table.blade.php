@@ -1,26 +1,23 @@
 <tr>
     <td>{{++$key}}</td>
-    <td>{{ Str::limit($admission->student->name, 47) }}</td>
+    <td>{{ Str::limit($admission->student->applicant, 47) }}</td>
     <td>{{ $admission->country->country_name }}, {{$admission->state->state_name}}</td>
     <td>{{ $admission->college->name }}</td>
     <td>
-        {{ $admission->intake_month }}, {{$admission->intake_year}}
+        {{ ucfirst($admission->intake_month) }}, {{$admission->intake_year}}
     </td>
     <td>{{ Str::limit($admission->student->program, 47) }}</td>
     <td>{{ $admission->fees }}</td>
 
     <td>
-        <a href="{{route('admission.edit', $admission->admissions_id)}}"  class="btn btn-icon-toggle btn-sm" title="edit">
+        <a href="{{route('admission.edit', $admission->id)}}"  class="btn btn-icon-toggle btn-sm" title="edit">
             <i class="mdi mdi-pencil"></i>
         </a>
-        <a href="{{ route('admission.destroy', $admission->admissions_id) }}">
-            <button type="button"
-            class="btn btn-icon-toggle">
-                <i class="far fa-trash-alt"></i>
-            </button>
-        </a>
+        <button type="button" class="btn btn-icon-toggle" onclick="deleteThis(this); return false;" link="{{ route('admission.destroy', $admission->id) }}">
+            <i class="far fa-trash-alt"></i>
+        </button>
         @if(getCommencedByStudent($admission->student_id) == true)
-            <button data-admission_id="{{$admission->admissions_id}}"  class="btn btn-warning btn-sm addcommencement" title="Add Commencement">
+            <button data-admission_id="{{$admission->id}}"  class="btn btn-warning btn-sm addcommencement" title="Add Commencement">
                 Add Commencement
             </button>
             <input type="hidden" class="student_id" value="{{$admission->student_id}}">
@@ -30,11 +27,11 @@
             <span class="badge badge-danger">UnApplied</span>
         @endif
 
-        {{-- <a href="{{route('admission.commission', $admission->admissions_id)}}"  class="btn btn-primary btn-sm" title="Add Commission">
+        {{-- <a href="{{route('admission.commission', $admission->id)}}"  class="btn btn-primary btn-sm" title="Add Commission">
             Add Commission
         </a>
 
-        <button data-admission_id="{{$admission->admissions_id}}"  class="btn btn-warning btn-sm viewhistory" title="Add Commission">
+        <button data-admission_id="{{$admission->id}}"  class="btn btn-warning btn-sm viewhistory" title="Add Commission">
             View Payment
         </button>
 

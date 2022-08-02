@@ -62,7 +62,7 @@
                     <h5 class="card-title">Add Commission Rate </h5>
                     <form action="{{route('admission.store_commission')}}" method="post">
                         @csrf
-                        <input type="hidden" name="admission_id" value="{{$admission->admissions_id}}">
+                        <input type="hidden" name="admission_id" value="{{$admission->id}}">
                         <input type="hidden" name="student_id" value="{{$admission->student_id}}">
                         <div id="additernary_edu">
                             @if(isset($admission->commissions) && $admission->commissions->isEmpty() == false)

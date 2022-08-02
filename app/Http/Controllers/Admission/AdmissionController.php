@@ -4,6 +4,10 @@ namespace App\Http\Controllers\Admission;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admission\AdmissionRequest;
+use App\Jobs\SendMailToAgentBranchJob;
+use App\Jobs\SendMailToStudentJob;
+use App\Mail\AgentForwardMail;
+use App\Mail\StudentForwardMail;
 use App\Modules\Models\Admission\Admission;
 use App\Modules\Models\ClaimCommission\ClaimCommission;
 use App\Modules\Models\College\College;
@@ -14,6 +18,7 @@ use App\Modules\Models\State\State;
 use App\Modules\Models\Student\Student;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class AdmissionController extends Controller
 {
@@ -105,7 +110,7 @@ class AdmissionController extends Controller
     public function edit($admission)
     {
         //
-        $admission = $this->admission->where('admissions_id',$admission)->first();
+        $admission = $this->admission->where('id',$admission)->first();
         $students =$this->students->paginate();
         $countries = $this->country->where('status','Active')->get();
         $states = State::where('status','Active')->get();
@@ -124,7 +129,7 @@ class AdmissionController extends Controller
     {
         //
         try {
-            $admission = $this->admission->where('admissions_id',$admission);
+            $admission = $this->admission->where('id',$admission);
             if($admission->update($request->data())) {
                 Toastr()->success('Admission Updated Successfully','Success');
                 return redirect()->route('admission.index');
@@ -147,22 +152,37 @@ class AdmissionController extends Controller
     public function destroy($admission)
     {
         //
-        $admission = $this->admission->where('admissions_id',$admission);
+        $admission = $this->admission->where('id',$admission);
         $admission->delete();
         return redirect()->route('admission.index')->withSuccess(trans('Admission has been deleted'));
     }
 
     public function addCommencement(Request $request) {
-
         try{
             $admission = $this->admission->where('student_id',$request->student_id)->whereNotNull('commenced_date')->where('commenced_status','applied')->get();
             if(!$admission->isEmpty()) {
                 Toastr()->error('The requested student has already commenced to another college','Error');
                 return redirect()->back();
             } else {
-                $admission = $this->admission->where('admissions_id',$request->admission_id);
+                $student = $this->students->where('id',$request->student_id)->first();
+                // Mail::to($student->agent->email)->send(new AgentForwardMail());
+                $admission = $this->admission->where('id',$request->admission_id);
+                $college = $admission->first()->college;
                 $data['commenced_date'] = $request->commenced_date;
                 $data['commenced_status'] = "applied";
+                // Mail::to('ritu.gubhaju20@gmail.com')->send(new StudentForwardMail($student, $admission->first(), $college));
+                if($student->source_ref == "branch" && isset($student->branch)) {
+                    $agent_branch = $student->branch;
+                    SendMailToAgentBranchJob::dispatch($agent_branch, $admission->first(), $college, $student)
+                    ->delay(now()->addSeconds(10));
+                }
+                if($student->source_ref == "agent" && isset($student->agent)) {
+                    $agent_branch = $student->agent;
+                    SendMailToAgentBranchJob::dispatch($agent_branch, $admission->first(), $college, $student)
+                    ->delay(now()->addSeconds(10));
+                }
+                SendMailToStudentJob::dispatch($student, $admission->first(), $college)
+                ->delay(now()->addSeconds(10));
                 if($admission->update($data)) {
                     Toastr()->success('Commenced Added Successfully','Success');
                     return redirect()->back();
@@ -195,7 +215,7 @@ class AdmissionController extends Controller
     }
 
     public function commissionRate($admission) {
-        $admission = $this->admission->where('admissions_id',$admission)->first();
+        $admission = $this->admission->where('id',$admission)->first();
         return view('admission.commission', compact('admission'));
 
     }
@@ -296,5 +316,10 @@ class AdmissionController extends Controller
         } catch (Exception $e) {
             return false;
         }
+    }
+
+    public function generateInvoice($id) {
+        $admission = $this->admission->where('id',$id)->first();
+        return view('commenced_admission.invoice', compact('admission'));
     }
 }

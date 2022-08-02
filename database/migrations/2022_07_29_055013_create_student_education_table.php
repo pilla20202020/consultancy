@@ -25,7 +25,7 @@ class CreateStudentEducationTable extends Migration
             $table->enum('status',['active','in_active'])->nullable();
             $table->bigInteger('created_by')->unsigned()->index()->nullable();
             $table->bigInteger('last_updated_by')->unsigned()->index()->nullable();
-            $table->foreign('student_id')->references('students_id')->on('tbl_students')->onDelete('cascade');
+            $table->foreign('student_id')->references('id')->on('tbl_students')->onDelete('cascade');
             $table->foreign('created_by')->references('users_id')->on('tbl_users')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('last_updated_by')->references('users_id')->on('tbl_users')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
